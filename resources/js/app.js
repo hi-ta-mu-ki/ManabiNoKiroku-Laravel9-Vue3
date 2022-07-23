@@ -4,16 +4,20 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import Vue from 'vue'
-import VueRouter from 'vue-router';
-import TextareaAutosize from 'vue-textarea-autosize'
-import sanitizeHTML from 'sanitize-html'
-import VModal from 'vue-js-modal'
-import VuejsDialog from 'vuejs-dialog';
-import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+// import Vue from 'vue'
+import { createApp } from 'vue'
+// import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
+// import TextareaAutosize from 'vue-textarea-autosize'
+// import sanitizeHTML from 'sanitize-html'
+import Vue3Sanitize from "vue-3-sanitize";
+// import VModal from 'vue-js-modal'
+// import VuejsDialog from 'vuejs-dialog';
+// import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 
 
-import store from './store'
+//import store from './store'
+import store from "./store/index.js";
 import SystemError from './components/e_learning2/errors/System.vue'
 import NotFound from './components/e_learning2/errors/NotFound.vue'
 import E_learning2_App from './E_learning2_App.vue'
@@ -49,20 +53,21 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
-Vue.use(VueRouter);
-Vue.use(TextareaAutosize);
-Vue.use(VModal);
-Vue.use(VuejsDialog, {
-  html: true,
-  loader: true,
-  okText: 'OK',
-  cancelText: 'Cancel',
-  animation: 'bounce'
-});
+// Vue.use(VueRouter);
+// Vue.use(TextareaAutosize);
+// Vue.use(VModal);
+// Vue.use(VuejsDialog, {
+//   html: true,
+//   loader: true,
+//   okText: 'OK',
+//   cancelText: 'Cancel',
+//   animation: 'bounce'
+// });
 
-
-const router = new VueRouter({
-  mode: 'history',
+// const router = new VueRouter({
+//   mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   scrollBehavior () {
     return { x: 0, y: 0 }
     },
@@ -264,9 +269,10 @@ const router = new VueRouter({
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-sanitizeHTML.defaults.allowedTags.push('img')
-sanitizeHTML.defaults.allowedAttributes.img = ['src']
-Vue.prototype.$sanitize = sanitizeHTML;
+
+// sanitizeHTML.defaults.allowedTags.push('img')
+// sanitizeHTML.defaults.allowedAttributes.img = ['src']
+// Vue.prototype.$sanitize = sanitizeHTML;
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -274,14 +280,25 @@ Vue.prototype.$sanitize = sanitizeHTML;
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- const createApp3 = async () => {
-  await store.dispatch('auth_e_learning2/currentUser')
-  new Vue({
-    el: '#app3',
-    router,
-    store,
-    components: { E_learning2_App }, // ルートコンポーネントの使用を宣言する
-    template: '<E_learning2_App />' // ルートコンポーネントを描画する
-});
-}
-createApp3()
+// const createApp3 = async () => {
+//   await store.dispatch('auth_e_learning2/currentUser')
+//   new Vue({
+//     el: '#app3',
+//     router,
+//     store,
+//     components: { E_learning2_App }, // ルートコンポーネントの使用を宣言する
+//     template: '<E_learning2_App />' // ルートコンポーネントを描画する
+// });
+// }
+// createApp3()
+
+const app = createApp(E_learning2_App)
+app.use(router)
+app.use(store)
+
+const overridenOptions = {
+  allowedTags: ['img']
+};
+app.use(Vue3Sanitize, overridenOptions);
+
+app.mount('#app3')
