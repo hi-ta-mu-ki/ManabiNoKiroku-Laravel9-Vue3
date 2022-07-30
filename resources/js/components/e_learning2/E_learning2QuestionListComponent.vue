@@ -29,13 +29,13 @@
       <table class="table table-hover">
         <thead class="thead-light">
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">セクション番号</th>
-          <th scope="col">問題番号</th>
-          <th scope="col">問題</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
+          <th scope="col" width="3%">ID</th>
+          <th scope="col" width="5%">セクション番号</th>
+          <th scope="col" width="3%">問題番号</th>
+          <th scope="col" width="74%">問題</th>
+          <th scope="col" width="7%"></th>
+          <th scope="col" width="4%"></th>
+          <th scope="col" width="4%"></th>
         </tr>
         </thead>
         <tbody>
@@ -69,11 +69,28 @@
               </router-link>
             </td>
             <td>
-              <button class="btn btn-danger text-white" @click="deleteQuestion(question.id)">削除</button>
+              <button class="btn btn-danger text-white" @click="question_delete(question.id)" data-bs-toggle="modal" data-bs-target="#questiondelete_Modal">削除</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <div class="modal fade" id="questiondelete_Modal" tabindex="-1" aria-labelledby="questiondelete_ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content text-black">
+            <div class="modal-header">
+              <h5 class="modal-title" id="questiondelete_ModalLabel">問題削除</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              削除します。よろしいですか？
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" @click="delete_go" data-bs-dismiss="modal">OK</button>
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -114,12 +131,23 @@ export default {
           this.questions = res.data
         });
     },
-    deleteQuestion(id) {
-      axios.delete('/api/e_learning2/question/' + id)
-        .then((res) => {
-          this.getQuestions()
-        });
+    question_update() {
+      this.getQuestions()
     },
+    question_delete:function(user_id) {
+      this.del_id = id
+    },
+    delete_go() {
+      axios.delete('/api/e_learning2/question/' + this.del_id)
+      this.getQuestions()
+      // dialog.close()
+    },
+    // question_delete(id) {
+    //   axios.delete('/api/e_learning2/question/' + id)
+    //     .then((res) => {
+    //       this.getQuestions()
+    //     });
+    // },
     jump2: function() {
       this.getQuestions()
     },

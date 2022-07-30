@@ -50,8 +50,25 @@
     </div>
     <hr>
     <div class="text-center mt-5">
-      <button class="btn btn-warning" @click="openModal">解答データ（グラフ）</button>
-      <AnswerGraph :no="no" :q_no="q_no" @from-child="closeModal" />
+      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal">
+        解答データ（グラフ）
+      </button>
+      <div class="modal fade" id="answerlist_Modal" tabindex="-1" aria-labelledby="answerlist_ModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content text-black">
+            <div class="modal-header">
+              <h5 class="modal-title" id="answerlist_ModalLabel">解答データ（グラフ）</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <AnswerGraph :no="no" :q_no="q_no" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -86,12 +103,6 @@ export default {
       this.answers.push(index)
       return this.answered = true
     },
-    openModal: function(){
-      this.$modal.show('modal_answer_graph')
-    },
-    closeModal: function(){
-      this.$modal.hide('modal_answer_graph')
-    }
   },
   computed: {
     currentQuestion: function() {

@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid">
-    <div class="bg-primary mb-3 text-white">
+    <div class="bg-primary mb-3">
       <nav class="navbar navbar-primary">
-        <span class="navbar-brand mb-0 ms-5 h1">まなびのきろく３　ログイン</span>
+        <span class="navbar-brand mb-0 ms-5 h1 text-white">まなびのきろく３　ログイン</span>
       </nav>
     </div>
     <div class="text-center">
@@ -54,7 +54,7 @@ export default {
         email: '',
         password: ''
       }
-   }
+  }
   },
   computed: mapState({
     apiStatus: state => state.auth_e_learning2.apiStatus,

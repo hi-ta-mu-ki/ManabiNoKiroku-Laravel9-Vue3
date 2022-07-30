@@ -29,11 +29,28 @@
             </router-link>
           </td>
           <td>
-            <button class="btn btn-danger text-white" v-confirm="onAlert(item.id)">削除</button>
+            <button class="btn btn-danger text-white" @click="class_delete(item.id)" data-bs-toggle="modal" data-bs-target="#classdelete_Modal">削除</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="modal fade" id="classdelete_Modal" tabindex="-1" aria-labelledby="classdelete_ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content text-black">
+          <div class="modal-header">
+            <h5 class="modal-title" id="classdelete_ModalLabel">クラス削除</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            所属する生徒，その生徒の成績も削除します。よろしいですか？
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" @click="delete_go" data-bs-dismiss="modal">OK</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,36 +62,29 @@ export default {
   data: function () {
     return {
       items: [],
+      del_id: 0
     }
   },
   methods: {
-    getclasses() {
+    getClasses() {
       axios.get('/api/e_learning2/class_list/' + this.groupId)
         .then((res) => {
           this.items = res.data
         })
     },
-    makeAdmin:function(dialog, id) {
-      axios.delete('/api/e_learning2/class/' + id)
-      this.getclasses()
-      dialog.close()
+    class_update() {
+      this.getClasses()
     },
-    doNothing:function() {
+    class_delete:function(id) {
+      this.del_id = id
     },
-    onAlert:function(id) {
-      let self = this
-      return {
-          ok: function(dialog){self.makeAdmin(dialog, id)},
-          cancel: this.doNothing(),
-          message: {
-            title: '確認',
-            body: '所属する生徒，その生徒の成績も削除します。よろしいですか？'
-          }
-      };
-    }
+    delete_go() {
+      axios.delete('/api/e_learning2/class/' + this.del_id)
+      this.getClasses()
+    },
   },
   mounted() {
-    this.getclasses()
+    this.getClasses()
   }
 }
 </script>

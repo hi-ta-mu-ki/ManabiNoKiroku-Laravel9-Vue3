@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    getgroup() {
+    getGroup() {
       axios.get('/api/e_learning2/group/' + this.groupId)
         .then((res) => {
           this.group = res.data
@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    this.getgroup()
+    this.getGroup()
   }
 }
 </script>

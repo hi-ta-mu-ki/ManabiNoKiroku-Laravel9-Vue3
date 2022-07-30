@@ -32,11 +32,28 @@
             </router-link>
           </td>
           <td>
-            <button class="btn btn-danger text-white" v-confirm="onAlert(user.id)">削除</button>
+            <button class="btn btn-danger text-white" @click="user_delete(user.id)" data-bs-toggle="modal" data-bs-target="#userdelete_Modal">削除</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="modal fade" id="userdelete_Modal" tabindex="-1" aria-labelledby="userdelete_ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content text-black">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userdelete_ModalLabel">ユーザ削除</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            このユーザの情報をすべて削除します。よろしいですか？
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" @click="delete_go" data-bs-dismiss="modal">OK</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,10 +62,11 @@ export default {
   data: function () {
     return {
       users: [],
+      del_id: 0
     }
   },
   methods: {
-    getusers() {
+    getUsers() {
       axios.get('/api/e_learning2/ad')
         .then((res) => {
           this.users = res.data;
@@ -56,27 +74,19 @@ export default {
             if(this.users[i].role != 10) this.users[i].password = null
         });
     },
-    makeAdmin:function(dialog, id) {
-      axios.delete('/api/e_learning2/ad/' + id)
-      this.getusers()
-      dialog.close()
+    user_update() {
+      this.getUsers()
     },
-    doNothing:function() {
+    user_delete:function(id) {
+      this.del_id = id
     },
-    onAlert:function(id) {
-      let self = this
-      return {
-          ok: function(dialog){self.makeAdmin(dialog, id)},
-          cancel: this.doNothing(),
-          message: {
-            title: '確認',
-            body: 'このユーザの情報をすべて削除します。よろしいですか？'
-          }
-      };
-    }
+    delete_go() {
+      axios.delete('/api/e_learning2/ad/' + this.del_id)
+      this.getUsers()
+    },
   },
   mounted() {
-    this.getusers()
+    this.getUsers()
   }
 }
 </script>

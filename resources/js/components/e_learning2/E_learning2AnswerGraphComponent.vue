@@ -1,13 +1,7 @@
 <template>
-  <modal name="modal_answer_graph" :draggable="true" :resizable="true" :scrollable="true" width="30%" height="auto">
-    <div id="overlay">
-      <div id="content">
-        <div class="container-fluid">
-          <PieChart :chartData="chartItems" :options="chartOptions"/>
-        </div>
-      </div>
-    </div>
-  </modal>
+  <div class="container-fluid">
+    <PieChart :chartData="chartItems" :options="chartOptions" />
+  </div>
 </template>
 
 <script>
@@ -18,7 +12,7 @@ export default {
     q_no: 0
   },
   components: {
-   PieChart
+    PieChart
   },
   data: function () {
     return {
@@ -98,25 +92,22 @@ export default {
         circumference: 2 * Math.PI, // （円グラフ）弧全体の角度
         // cutoutPercentage: 50, // （ドーナツ）中央部から切り取られるグラフの割合
         // startAngle: -0.5 * Math.PI // (鶏頭図のみ) データセットの最初の項目の円弧を描画する開始角度
-      plugins: {
-        labels: {
-          render: 'percentage',
-          fontColor: 'white',
-          fontSize: 20
+        plugins: {
+          labels: {
+            render: 'percentage',
+            fontColor: 'white',
+            fontSize: 20
+          }
         }
-      }
-      }
+      },
     }
   },
   methods: {
     getAnswersData() {
       axios.get('/api/e_learning2/question/answer_g/'+ this.$store.getters['auth_e_learning2/e_groups_id'] +'/' + this.no + '/' + this.q_no)
-       .then((res) => {
+        .then((res) => {
           this.chartItems.datasets[0].data = res.data
         });
-    },
-    clickEvent: function() {
-      this.$emit('from-child')
     },
   },
   mounted() {

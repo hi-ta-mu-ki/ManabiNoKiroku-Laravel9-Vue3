@@ -11,8 +11,25 @@
             </select>
           </div>
           <div v-if="isClassSelect" class="col-sm-4">
-            <button class="btn btn-success me-2 col-sm-4 text-white" @click="openModal">メンバーを追加</button>
-            <MemberAdd :e_classes_id="e_classes_id" @from-child="closeModal" />
+            <button class="btn btn-success me-2 col-sm-4 text-white" data-bs-toggle="modal" data-bs-target="#memberadd_Modal">
+              メンバーを追加
+            </button>
+            <div class="modal fade" id="memberadd_Modal" tabindex="-1" aria-labelledby="memberadd_ModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content text-black">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="memberadd_ModalLabel">メンバーを追加</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <MemberAdd :e_classes_id="e_classes_id" />
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @click="member_update" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -35,11 +52,28 @@
               <div v-else>生徒</div>
             </td>
             <td>
-              <button class="btn btn-danger text-white" v-confirm="onAlert(user.user_id)">削除</button>
+              <button class="btn btn-danger text-white" @click="member_delete(user.user_id)" data-bs-toggle="modal" data-bs-target="#memberdelete_Modal">削除</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <div class="modal fade" id="memberdelete_Modal" tabindex="-1" aria-labelledby="memberdelete_ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content text-black">
+            <div class="modal-header">
+              <h5 class="modal-title" id="memberdelete_ModalLabel">メンバー削除</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              この生徒の成績も削除します。よろしいですか？
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" @click="delete_go" data-bs-dismiss="modal">OK</button>
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -55,7 +89,8 @@ export default {
       classes_menus: [],
       isClassSelect: false,
       users: [],
-      e_classes_id: 0
+      e_classes_id: 0,
+      del_id: 0
     }
   },
   methods: {
@@ -71,35 +106,20 @@ export default {
           this.users = res.data
         });
     },
-    makeAdmin:function(dialog, id) {
-      axios.delete('/api/e_learning2/st/answer/' + id)
-      axios.delete('/api/e_learning2/member_list/' + id)
+    member_update() {
       this.getUsers()
-      dialog.close()
     },
-    doNothing:function() {
+    member_delete:function(id) {
+      this.del_id = id
     },
-    onAlert:function(id) {
-      let self = this
-      return {
-        ok: function(dialog){self.makeAdmin(dialog, id)},
-        cancel: this.doNothing(),
-        message: {
-          title: '確認',
-          body: 'この生徒の成績も削除します。よろしいですか？'
-        }
-      };
+    delete_go() {
+      axios.delete('/api/e_learning2/st/answer/' + this.del_id)
+      axios.delete('/api/e_learning2/member_list/' + this.del_id)
+      this.getUsers()
     },
     jump: function() {
       this.$store.commit('auth_e_learning2/setE_Classes_Id', this.e_classes_id)
       this.isClassSelect = true
-      this.getUsers()
-    },
-    openModal: function(){
-      this.$modal.show('modal_member_add');
-    },
-    closeModal: function(){
-      this.$modal.hide('modal_member_add');
       this.getUsers()
     },
   },

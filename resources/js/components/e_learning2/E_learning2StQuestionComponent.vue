@@ -4,30 +4,70 @@
       <div class="col-sm-3">
         <div class="row">
           <label for="selectclass" class="col-form-label col-sm-4 ms-2 me-2">クラスをえらぶ：</label>
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <select class="form-select " id="selectclass" @change="jump1" v-model="e_classes_id">
               <option v-for="classes_menu in classes_menus" :key="classes_menu.id" v-bind:value="classes_menu.id" >{{ classes_menu.name }}</option>
             </select>
           </div>
         </div>
       </div>
+      <div class="col-sm-2">
+        <div v-if="isClassSelect">
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal">
+            これまでのきろく
+          </button>
+          <div class="modal fade" id="answerlist_Modal" tabindex="-1" aria-labelledby="answerlist_ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+              <div class="modal-content text-black">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="answerlist_ModalLabel">これまでのきろく</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover table-sm" ref="table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">セクションめい</th>
+                        <th scope="col">かいとうじこく</th>
+                        <th scope="col" v-for="i in n - 3" :key="i">
+                          もんだい{{ i }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="answer in answer_lists" :key="answer.id">
+                        <td v-for="i in n - 1" :key="i">
+                          <div v-if="i < 3">
+                            {{ answer[i] }}
+                          </div>
+                          <div v-else class="text-center">
+                            <span v-if="answer[i]">
+                              <img src="/image/smile2_small.png" border="0" />
+                            </span>
+                            <span v-else>
+                              <img src="/image/smile3_small.png" border="0" />
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-sm-7">
         <div class="row">
           <label for="selectsection" class="col-form-label col-sm-2 me-2">セクションをえらぶ：</label>
-          <div class="col-sm-6">
+          <div class="col-sm-9">
             <select class="form-select" id="selectsection" @change="jump2" v-model="no">
               <option v-for="question in questions_menu" :key="question.no" v-bind:value="question.no" >{{ question.quest }}</option>
             </select>
-         </div>
-        </div>
-      </div>
-      <div class="col-sm-2">
-        <div v-if="isClassSelect">
-          <div class="row">
-            <div class="col-sm-6">
-              <button class="btn btn-warning ms-2" @click="openModal">きろく</button>
-              <StAnswerList :e_classes_id="e_classes_id" :user_id="user_id" @from-child="closeModal" />
-            </div>
           </div>
         </div>
       </div>
@@ -35,7 +75,7 @@
     <div class="row justify-content-center" v-if="no==null">
       <div class="col-sm-12 h1">
         <div class="text-center">うえのメニューからクラス，つぎにセクションをえらんでください。</div>
-     </div>
+      </div>
     </div>
     <div class="row justify-content-center" v-else-if="!answered">
       <div class="col-sm-12">
@@ -116,14 +156,10 @@
 </template>
 
 <script>
-import StAnswerList from './E_learning2StAnswerListComponent.vue'
 import { mapState } from 'vuex'
 export default {
   props: {
     no: String,
-  },
-  components: {
-    StAnswerList
   },
   data: function () {
     return {
@@ -140,7 +176,10 @@ export default {
       question_num: 0,
       s_id: 0,
       e_classes_id: 0,
-      user_id: 0
+      user_id: 0,
+      answer_lists: [],
+      n: 0,
+
     }
   },
   methods: {
@@ -192,6 +231,7 @@ export default {
     jump1: function() {
       this.isClassSelect = true
       this.getQuestionsMenu()
+      this.getAnswer_lists()
       if(this.no != null) this.getQuestions()
     },
     jump2: function() {
@@ -204,18 +244,25 @@ export default {
       const date= new Date()
       this.s_id = date.getTime() / 1000
     },
+    getAnswer_lists() {
+      axios
+        .get(
+          "/api/e_learning2/st/answer/" + this.user_id + "/" + this.e_classes_id
+        )
+        .then((res) => {
+          this.answer_lists = res.data;
+          for (let i = 0; i < this.answer_lists.length; i++) {
+            if (this.n < this.answer_lists[i].length)
+              this.n = this.answer_lists[i].length;
+          }
+        });
+    },
     async logout () {
       await this.$store.dispatch('auth_e_learning2/logout')
       if (this.apiStatus) {
         this.$router.push('/e_learning2/login')
       }
     },
-    openModal: function(){
-      this.$modal.show('modal_answer_list')
-    },
-    closeModal: function(){
-      this.$modal.hide('modal_answer_list')
-    }
   },
   computed: {
     currentQuestion: function() {

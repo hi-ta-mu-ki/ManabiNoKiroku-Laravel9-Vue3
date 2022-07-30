@@ -29,7 +29,7 @@
             </router-link>
           </td>
           <td>
-            <button class="btn btn-danger text-white" v-confirm="onAlert(group.id)">削除</button>
+            <button class="btn btn-danger text-white" @click="group_delete(group.id)" data-bs-toggle="modal" data-bs-target="#groupdelete_Modal">削除</button>
           </td>
           <td>
             <router-link v-bind:to="{name: 'tc.owner', params: {groupId: group.id }}">
@@ -44,6 +44,23 @@
         </tr>
       </tbody>
     </table>
+    <div class="modal fade" id="groupdelete_Modal" tabindex="-1" aria-labelledby="groupdelete_ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content text-black">
+          <div class="modal-header">
+            <h5 class="modal-title" id="groupdelete_ModalLabel">グループ削除</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            このグループの問題，クラス，所属する生徒，成績のすべてを削除します。よろしいですか？
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" @click="delete_go" data-bs-dismiss="modal">OK</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,36 +69,29 @@ export default {
   data: function () {
     return {
       groups: [],
+      del_id: 0
     }
   },
   methods: {
-    getgroups() {
+    getGroups() {
       axios.get('/api/e_learning2/group')
         .then((res) => {
           this.groups = res.data
         })
     },
-    makeAdmin:function(dialog, id) {
-      axios.delete('/api/e_learning2/group/' + id)
-      this.getgroups()
-      dialog.close()
+    group_update() {
+      this.getGroups()
     },
-    doNothing:function() {
+    group_delete:function(id) {
+      this.del_id = id
     },
-    onAlert:function(id) {
-      let self = this
-      return {
-          ok: function(dialog){self.makeAdmin(dialog, id)},
-          cancel: this.doNothing(),
-          message: {
-            title: '確認',
-            body: 'このグループの問題，クラス，所属する生徒，成績のすべてを削除します。よろしいですか？'
-          }
-      }
-    }
+    delete_go() {
+      axios.delete('/api/e_learning2/group_list/' + this.del_id)
+      this.getGroups()
+    },
   },
   mounted() {
-    this.getgroups()
+    this.getGroups()
   }
 }
 </script>

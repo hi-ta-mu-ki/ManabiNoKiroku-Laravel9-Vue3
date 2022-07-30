@@ -41,7 +41,7 @@ export default {
     }
   },
   methods: {
-    getclass() {
+    getClass() {
       axios.get('/api/e_learning2/class/' + this.classId)
         .then((res) => {
           this.clas = res.data
@@ -60,7 +60,7 @@ export default {
     }
   },
   mounted() {
-    this.getclass()
+    this.getClass()
   }
 }
 </script>

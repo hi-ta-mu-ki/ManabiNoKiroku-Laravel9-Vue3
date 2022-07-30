@@ -7,13 +7,13 @@
           <div class="row mb-2">
             <label for="pass_code" class="col-form-label col-sm-2 mb-2">パスコード</label>
             <div class="col-sm-4">
-              <input type="text" class=" form-control col-sm-6" id="pass_code" v-model="joinForm.pass_code" placeholder="参加のためのパスコードを入力">
+              <input type="text" class="form-control col-sm-6" id="pass_code" v-model="joinForm.pass_code" placeholder="参加のためのパスコードを入力">
             </div>
           </div>
           <div v-if="isMsg" class="row">
             <div class="alert alert-danger" role="alert">{{ msg }}</div>
           </div>
-          <button type="submit" class="btn btn-primary">さんかする</button>
+          <button type="submit" class="btn btn-primary me-1">さんかする</button>
           <button type="button" class="btn btn-secondary" @click="cansel">キャンセル</button>
         </form>
       </div>

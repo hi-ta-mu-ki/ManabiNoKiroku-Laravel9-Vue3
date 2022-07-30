@@ -1,11 +1,11 @@
 <template>
-  <div class="container-fluid bg-primary mb-3 text-white">
+  <div class="container-fluid bg-primary mb-3">
     <nav class="navbar navbar-primary">
-      <span class="navbar-brand mb-0 h1">まなびのきろく３　きょうもがんばろう！
+      <span class="navbar-brand mb-0 h1 text-white">まなびのきろく３　きょうもがんばろう！
       <img src="/image/student_small.gif" border="0"></span>
       <div class="col-sm-2">
         <router-link v-bind:to="{name: 'st.join'}">
-          <button class="btn btn-success text-white">クラスにさんか</button>
+          <button class="btn btn-success me-1 text-white">クラスにさんか</button>
         </router-link>
         <button class="btn btn-secondary" @click="logout">ログアウト</button>
       </div>

@@ -69,7 +69,7 @@ window.Vue = require('vue').default;
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior () {
-    return { x: 0, y: 0 }
+    return { left: 0, top: 0 }
     },
   routes: [
     {
@@ -189,7 +189,7 @@ const router = createRouter({
             component: E_learning2QuestionSettingComponent
           },
           {
-            path: '*',
+            path: '/:pathMatch(.*)*',
             component: NotFound
           },
         ]
@@ -210,7 +210,7 @@ const router = createRouter({
             component: E_learning2ClassJoinComponent
           },
           {
-            path: '*',
+            path: '/:pathMatch(.*)*',
             component: NotFound
           },
         ]
@@ -241,7 +241,7 @@ const router = createRouter({
             props: true
           },
           {
-            path: '*',
+            path: '/:pathMatch(.*)*',
             component: NotFound
           },
         ]
