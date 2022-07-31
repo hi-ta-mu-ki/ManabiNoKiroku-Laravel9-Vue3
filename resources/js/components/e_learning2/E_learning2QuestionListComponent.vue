@@ -58,9 +58,23 @@
                 </router-link>
               </div>
               <div v-else>
-                <router-link v-bind:to="{name: 'tc.answer', params: {no: question.no }}">
-                  <button class="btn btn-warning">生徒の成績</button>
-                </router-link>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal" @click="showModal = ! showModal">生徒の成績</button>
+                <div class="modal fade" id="answerlist_Modal" tabindex="-1" aria-labelledby="answerlist_ModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content text-black">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="answerlist_ModalLabel">この問題の生徒の成績</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = ! showModal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <AnswerList :no="question.no" :section_name="section_name" :n="n" v-model="showModal" />
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn btn-primary" data-bs-dismiss="modal" @click="showModal = ! showModal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </td>
             <td>
@@ -96,7 +110,11 @@
 </template>
 
 <script>
+import AnswerList from './E_learning2AnswerListComponent.vue'
 export default {
+  components: {
+    AnswerList
+  },
   data: function () {
     return {
       groups_menus: [],
@@ -104,7 +122,10 @@ export default {
       isGroupSelect: false,
       no: '',
       questions_menu: [],
-      questions: []
+      questions: [],
+      n: 0,
+      section_name: '',
+      showModal: false
     }
   },
   methods: {
@@ -129,6 +150,8 @@ export default {
       axios.get('/api/e_learning2/question/'+ this.$store.getters['auth_e_learning2/e_groups_id'] +'/' + this.no)
         .then((res) => {
           this.questions = res.data
+          this.section_name = this.questions[0].quest
+          this.n = this.questions.length
         });
     },
     question_update() {
@@ -140,14 +163,7 @@ export default {
     delete_go() {
       axios.delete('/api/e_learning2/question/' + this.del_id)
       this.getQuestions()
-      // dialog.close()
     },
-    // question_delete(id) {
-    //   axios.delete('/api/e_learning2/question/' + id)
-    //     .then((res) => {
-    //       this.getQuestions()
-    //     });
-    // },
     jump2: function() {
       this.getQuestions()
     },

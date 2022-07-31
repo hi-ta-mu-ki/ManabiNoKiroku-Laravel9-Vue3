@@ -13,7 +13,7 @@
       </div>
       <div class="col-sm-2">
         <div v-if="isClassSelect">
-          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal">
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal" @click="showModal = ! showModal">
             これまでのきろく
           </button>
           <div class="modal fade" id="answerlist_Modal" tabindex="-1" aria-labelledby="answerlist_ModalLabel" aria-hidden="true">
@@ -21,40 +21,13 @@
               <div class="modal-content text-black">
                 <div class="modal-header">
                   <h5 class="modal-title" id="answerlist_ModalLabel">これまでのきろく</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = ! showModal"></button>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-hover table-sm" ref="table">
-                    <thead class="thead-light">
-                      <tr>
-                        <th scope="col">セクションめい</th>
-                        <th scope="col">かいとうじこく</th>
-                        <th scope="col" v-for="i in n - 3" :key="i">
-                          もんだい{{ i }}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="answer in answer_lists" :key="answer.id">
-                        <td v-for="i in n - 1" :key="i">
-                          <div v-if="i < 3">
-                            {{ answer[i] }}
-                          </div>
-                          <div v-else class="text-center">
-                            <span v-if="answer[i]">
-                              <img src="/image/smile2_small.png" border="0" />
-                            </span>
-                            <span v-else>
-                              <img src="/image/smile3_small.png" border="0" />
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <StAnswerList :e_classes_id="e_classes_id" :user_id="user_id" v-model="showModal" />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="showModal = ! showModal">Close</button>
                 </div>
               </div>
             </div>
@@ -156,8 +129,12 @@
 </template>
 
 <script>
+import StAnswerList from './E_learning2StAnswerListComponent.vue'
 import { mapState } from 'vuex'
 export default {
+  components: {
+    StAnswerList
+  },
   props: {
     no: String,
   },
@@ -165,7 +142,6 @@ export default {
     return {
       classes_menus: [],
       isClassSelect: false,
-//      no: 0,
       answers: [],
       questionIndex: 0,
       questions_menu: [],
@@ -177,9 +153,7 @@ export default {
       s_id: 0,
       e_classes_id: 0,
       user_id: 0,
-      answer_lists: [],
-      n: 0,
-
+      showModal: false
     }
   },
   methods: {
@@ -199,7 +173,7 @@ export default {
       axios.get('/api/e_learning2/st/' + this.e_classes_id + '/' + this.no)
         .then((res) => {
           this.questions = res.data
-          this.question_num = this.questions.length
+          this.question_num = Object.keys(this.questions).length
         })
     },
     addAnswer: function(index) {
@@ -231,7 +205,7 @@ export default {
     jump1: function() {
       this.isClassSelect = true
       this.getQuestionsMenu()
-      this.getAnswer_lists()
+      // this.getAnswer_lists()
       if(this.no != null) this.getQuestions()
     },
     jump2: function() {
@@ -243,19 +217,6 @@ export default {
       this.getQuestions()
       const date= new Date()
       this.s_id = date.getTime() / 1000
-    },
-    getAnswer_lists() {
-      axios
-        .get(
-          "/api/e_learning2/st/answer/" + this.user_id + "/" + this.e_classes_id
-        )
-        .then((res) => {
-          this.answer_lists = res.data;
-          for (let i = 0; i < this.answer_lists.length; i++) {
-            if (this.n < this.answer_lists[i].length)
-              this.n = this.answer_lists[i].length;
-          }
-        });
     },
     async logout () {
       await this.$store.dispatch('auth_e_learning2/logout')

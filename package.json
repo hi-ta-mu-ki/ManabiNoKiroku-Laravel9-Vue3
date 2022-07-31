@@ -30,7 +30,6 @@
         "vue-chartjs": "^4.1.1",
         "vue-loader": "^16.0.0",
         "vue-router": "^4.0.0",
-        "vue-textarea-autosize": "^1.1.1",
         "vuex": "^4.0.0",
         "xlsx": "^0.17.1"
     }

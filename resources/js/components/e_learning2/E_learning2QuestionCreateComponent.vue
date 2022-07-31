@@ -37,23 +37,23 @@
           </div>
           <div class="form-group row">
             <label for="quest" class="col-sm-1 col-form-label">問題</label>
-            <textarea-autosize class="col-sm-11 form-control" id="quest" v-model="question.quest"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="quest" v-model="question.quest"></textarea>
           </div>
           <div class="form-group row">
             <label for="ans1" class="col-sm-1 col-form-label">解答群1</label>
-            <textarea-autosize class="col-sm-11 form-control" id="ans1" v-model="question.ans1"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="ans1" v-model="question.ans1"></textarea>
           </div>
           <div class="form-group row">
             <label for="ans2" class="col-sm-1 col-form-label">解答群2</label>
-            <textarea-autosize class="col-sm-11 form-control" id="ans2" v-model="question.ans2"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="ans2" v-model="question.ans2"></textarea>
           </div>
           <div class="form-group row">
             <label for="ans3" class="col-sm-1 col-form-label">解答群3</label>
-            <textarea-autosize class="col-sm-11 form-control" id="ans3" v-model="question.ans3"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="ans3" v-model="question.ans3"></textarea>
           </div>
           <div class="form-group row">
             <label for="ans4" class="col-sm-1 col-form-label">解答群4</label>
-            <textarea-autosize class="col-sm-11 form-control" id="ans4" v-model="question.ans4"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="ans4" v-model="question.ans4"></textarea>
           </div>
           <div class="form-group row">
             <label for="ans" class="col-sm-1 col-form-label">正解</label>
@@ -66,23 +66,23 @@
           </div>
           <div class="form-group row">
             <label for="exp1" class="col-sm-1 col-form-label">解説1</label>
-            <textarea-autosize class="col-sm-11 form-control" id="exp1" v-model="question.exp1"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="exp1" v-model="question.exp1"></textarea>
           </div>
           <div class="form-group row">
             <label for="exp2" class="col-sm-1 col-form-label">解説2</label>
-            <textarea-autosize class="col-sm-11 form-control" id="exp2" v-model="question.exp2"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="exp2" v-model="question.exp2"></textarea>
           </div>
           <div class="form-group row">
             <label for="exp3" class="col-sm-1 col-form-label">解説3</label>
-            <textarea-autosize class="col-sm-11 form-control" id="exp3" v-model="question.exp3"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="exp3" v-model="question.exp3"></textarea>
           </div>
           <div class="form-group row">
             <label for="exp4" class="col-sm-1 col-form-label">解説4</label>
-            <textarea-autosize class="col-sm-11 form-control" id="exp4" v-model="question.exp4"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="exp4" v-model="question.exp4"></textarea>
           </div>
           <div class="form-group row">
             <label for="exp0" class="col-sm-1 col-form-label">解説</label>
-            <textarea-autosize class="col-sm-11 form-control" id="exp0" v-model="question.exp0"></textarea-autosize>
+            <textarea class="col-sm-11 form-control" id="exp0" v-model="question.exp0"></textarea>
           </div>
           <div class="mt-4">
             <button type="submit" class="btn btn-primary">決定</button>

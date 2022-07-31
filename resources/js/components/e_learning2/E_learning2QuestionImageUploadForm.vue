@@ -1,5 +1,5 @@
 <template>
-  <div v-show="value">
+  <div v-show="modelValue">
     <div v-show="loading">
       <Loader>Sending your photo...</Loader>
     </div>
@@ -51,7 +51,7 @@ export default {
     Loader
   },
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       required: true
     }

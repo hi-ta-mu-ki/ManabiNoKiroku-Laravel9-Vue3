@@ -122,12 +122,12 @@ const router = createRouter({
             component: E_learning2QuestionEditComponent,
             props: true
           },
-          {
-            path: 'answer/:no',
-            name: 'tc.answer',
-            component: E_learning2AnswerListComponent,
-            props: true
-          },
+          // {
+          //   path: 'answer/:no',
+          //   name: 'tc.answer',
+          //   component: E_learning2AnswerListComponent,
+          //   props: true
+          // },
           {
             path: 'group/list',
             name: 'tc.grouplist',
@@ -300,5 +300,5 @@ const overridenOptions = {
   allowedTags: ['img']
 };
 app.use(Vue3Sanitize, overridenOptions);
-
+// app.use(TextareaAutosize)
 app.mount('#app3')

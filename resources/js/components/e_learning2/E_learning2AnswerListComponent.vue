@@ -1,22 +1,24 @@
 <template>
-  <div class="container-fluid">
-    <h3>{{ questions[0].quest }}</h3>
-    <table class="table table-hover table-sm" ref="table">
-      <thead class="thead-light">
-      <tr>
-        <th scope="col">名前</th>
-        <th scope="col">メールアドレス</th>
-        <th scope="col">解答時刻</th>
-        <th scope="col" v-for="i in n - 1" :key="i">問題{{ i }}</th>
-      </tr>
-      </thead>
-      <tbody>
-        <tr v-for="answer in answers" :key="answer.id">
-          <td v-for="i in n + 2" :key="i">{{ answer[i] }}</td>
+  <div v-show="modelValue">
+    <div class="container-fluid">
+      <h3>{{ section_name }}</h3>
+      <table class="table table-hover table-sm" ref="table">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">名前</th>
+          <th scope="col">メールアドレス</th>
+          <th scope="col">解答時刻</th>
+          <th scope="col" v-for="i in Number(n) - 1" :key="i">問題{{ i }}</th>
         </tr>
-      </tbody>
-    </table>
-    <button class="btn btn-success text-white" @click="downloadExcelFile()">Excelにダウンロード</button>
+        </thead>
+        <tbody>
+          <tr v-for="answer in answers" :key="answer.id">
+            <td v-for="i in Number(n) + 2" :key="i">{{ answer[i] }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-success text-white" @click="downloadExcelFile()">Excelにダウンロード</button>
+    </div>
   </div>
 </template>
 
@@ -24,23 +26,20 @@
 import XLSX from 'xlsx'
 export default {
   props: {
-    no: String,
+    no: '',
+    n: 0,
+    section_name: '',
+    modelValue: {
+      type: Boolean,
+      required: true
+    }
   },
   data: function () {
     return {
-      questions: [],
       answers: [],
-      n: 0
     }
   },
   methods: {
-    getQuestions() {
-      axios.get('/api/e_learning2/question/'+ this.$store.getters['auth_e_learning2/e_groups_id'] +'/' + this.no)
-        .then((res) => {
-          this.questions = res.data
-          this.n = this.questions.length - 1
-        });
-    },
     getAnswers() {
       axios.get('/api/e_learning2/question/answer/'+ this.$store.getters['auth_e_learning2/e_groups_id'] +'/' + this.no)
         .then((res) => {
@@ -53,9 +52,10 @@ export default {
       XLSX.writeFile(wb,'e_learning2_answer_list.xlsx')
     },
   },
-  mounted() {
-    this.getAnswers()
-    this.getQuestions()
-  }
+  watch: {
+    modelValue: function(){
+      this.getAnswers()
+    }
+  },
 }
 </script>
