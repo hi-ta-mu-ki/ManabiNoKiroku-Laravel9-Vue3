@@ -50,21 +50,21 @@
     </div>
     <hr>
     <div class="text-center mt-5">
-      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal">
+      <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#answerlist_Modal" @click="showModal = ! showModal">
         解答データ（グラフ）
       </button>
       <div class="modal fade" id="answerlist_Modal" tabindex="-1" aria-labelledby="answerlist_ModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
+        <div class="modal-dialog">
           <div class="modal-content text-black">
             <div class="modal-header">
-              <h5 class="modal-title" id="answerlist_ModalLabel">解答データ（グラフ）</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title" id="answerlist_ModalLabel">解答データ分布</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="showModal = ! showModal"></button>
             </div>
             <div class="modal-body">
-              <AnswerGraph :no="no" :q_no="q_no" />
+              <AnswerGraph :no="no" :q_no="q_no" v-model="showModal" />
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="showModal = ! showModal">Close</button>
             </div>
           </div>
         </div>
@@ -90,6 +90,7 @@ export default {
       questions: [],
       answered: false,
       correct: 0,
+      showModal: false
     }
   },
   methods: {

@@ -29,7 +29,6 @@ import E_learning2QuestionShowComponent from "./components/e_learning2/E_learnin
 import E_learning2QuestionCreateComponent from "./components/e_learning2/E_learning2QuestionCreateComponent";
 import E_learning2QuestionEditComponent from "./components/e_learning2/E_learning2QuestionEditComponent";
 import E_learning2QuestionCsvComponent from "./components/e_learning2/E_learning2QuestionCsvComponent";
-import E_learning2AnswerListComponent from "./components/e_learning2/E_learning2AnswerListComponent";
 import E_learning2QuestionSettingComponent from "./components/e_learning2/E_learning2QuestionSettingComponent";
 import E_learning2GroupListComponent from "./components/e_learning2/E_learning2GroupListComponent";
 import E_learning2GroupCreateComponent from "./components/e_learning2/E_learning2GroupCreateComponent";
@@ -122,12 +121,6 @@ const router = createRouter({
             component: E_learning2QuestionEditComponent,
             props: true
           },
-          // {
-          //   path: 'answer/:no',
-          //   name: 'tc.answer',
-          //   component: E_learning2AnswerListComponent,
-          //   props: true
-          // },
           {
             path: 'group/list',
             name: 'tc.grouplist',
@@ -300,5 +293,4 @@ const overridenOptions = {
   allowedTags: ['img']
 };
 app.use(Vue3Sanitize, overridenOptions);
-// app.use(TextareaAutosize)
 app.mount('#app3')
