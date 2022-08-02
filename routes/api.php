@@ -44,7 +44,7 @@ Route::put('/e_learning2/group/{id}', 'E_learning2Controller@group_update');
 Route::delete('/e_learning2/group/{id}', 'E_learning2Controller@group_destroy');
 Route::get('/e_learning2/owner_list/{e_groups_id}', 'E_learning2Controller@owner_list');
 Route::delete('/e_learning2/owner_list/{user_id}', 'E_learning2Controller@owner_list_delete');
-Route::get('/e_learning2/group_join', 'E_learning2Controller@group_user_index');
+Route::get('/e_learning2/group_join/{e_groups_id}/{keyword}', 'E_learning2Controller@group_user_index');
 Route::post('/e_learning2/group_join/{e_groups_id}', 'E_learning2Controller@group_join');
 //クラス
 Route::get('/e_learning2/classes_menu', 'E_learning2Controller@classes_menu');
@@ -56,7 +56,7 @@ Route::delete('/e_learning2/class/{id}', 'E_learning2Controller@class_destroy');
 Route::get('/e_learning2/member_list/{e_classes_id}', 'E_learning2Controller@member_list');
 Route::delete('/e_learning2/member_list/{user_id}', 'E_learning2Controller@member_list_delete');
 Route::get('/e_learning2/member_list2/{e_classes_id}', 'E_learning2Controller@member_list2');
-Route::get('/e_learning2/class_join1', 'E_learning2Controller@class_user_index');
+Route::get('/e_learning2/class_join1/{e_classes_id}/{keyword}', 'E_learning2Controller@class_user_index');
 Route::post('/e_learning2/class_join1/{e_classes_id}', 'E_learning2Controller@class_join1');
 Route::post('/e_learning2/class_join2', 'E_learning2Controller@class_join2');
 //実施設定

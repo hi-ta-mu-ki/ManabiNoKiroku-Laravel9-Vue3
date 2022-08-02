@@ -290,9 +290,11 @@ class E_learning2Controller extends Controller
     E_owner::where('user_id', $id)->delete();
   }
 
-  public function group_user_index()
+  public function group_user_index($e_groups_id, $keyword)
   {
-    return User::where('role', '!=', 1)->where('role', '!=', 10)->select('id', 'name')->get();
+    $e_owner = E_owner::where('e_groups_id', $e_groups_id)->select('user_id')->getQuery();
+    $add_owner = User::where('role', '!=', 1)->where('role', '!=', 10)->whereNotIn('id', $e_owner)->where('name', 'like', '%' . $keyword . '%')->select('id', 'name')->get();
+    return $add_owner;
   }
 
   public function group_join($e_groups_id, Request $request)
@@ -379,9 +381,11 @@ class E_learning2Controller extends Controller
     return E_member::select('user_id','name')->join('users', 'users.id','=','e_members.user_id')->where('e_classes_id', $e_classes_id)->where('role', 10)->orderBy('user_id', 'asc')->get();
   }
 
-  public function class_user_index()
+  public function class_user_index($e_classes_id, $keyword)
   {
-    return User::where('role', '!=', 1)->select('id', 'name')->get();
+    $e_member = E_member::where('e_classes_id', $e_classes_id)->select('user_id')->getQuery();
+    $add_member = User::where('role', '!=', 1)->whereNotIn('id', $e_member)->where('name', 'like', '%' . $keyword . '%')->select('id', 'name')->get();
+    return $add_member;
   }
 
   public function class_join1($e_classes_id, Request $request)
