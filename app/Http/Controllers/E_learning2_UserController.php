@@ -15,7 +15,7 @@ class E_learning2_UserController extends Controller
     $this->user_service = $user_service;
   }
 
-  public function user_index()
+  public function user_list()
   {
     return $this->user_service->all()->paginate(10);
   }

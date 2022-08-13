@@ -23,15 +23,15 @@ Route::post('/e_learning2/login', 'Auth\LoginController@login')->name('login');
 Route::post('/e_learning2/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/e_learning2/user', fn () => Auth::user())->name('user');
 //問題
-Route::get('/e_learning2/section_menu1/{e_groups_id}', 'E_learning2_QuestionController@menu');
-Route::get('/e_learning2/question/{e_groups_id}/{no}', 'E_learning2_QuestionController@list');
-Route::get('/e_learning2/question/{id}', 'E_learning2_QuestionController@show');
-Route::post('/e_learning2/question', 'E_learning2_QuestionController@create');
-Route::put('/e_learning2/question/{id}', 'E_learning2_QuestionController@update');
-Route::delete('/e_learning2/question/{id}', 'E_learning2_QuestionController@delete');
-Route::post('/e_learning2/question/import', 'E_learning2_QuestionController@import');
-Route::post('/e_learning2/question/import2', 'E_learning2_QuestionController@import2');
-Route::post('/e_learning2/question/upload', 'E_learning2_QuestionController@upload');
+Route::get('/e_learning2/section_menu1/{e_groups_id}', 'E_learning2_QuestionController@question_menu');
+Route::get('/e_learning2/question/{e_groups_id}/{no}', 'E_learning2_QuestionController@question_list');
+Route::get('/e_learning2/question/{id}', 'E_learning2_QuestionController@question_show');
+Route::post('/e_learning2/question', 'E_learning2_QuestionController@question_create');
+Route::put('/e_learning2/question/{id}', 'E_learning2_QuestionController@question_update');
+Route::delete('/e_learning2/question/{id}', 'E_learning2_QuestionController@question_delete');
+Route::post('/e_learning2/question/import', 'E_learning2_QuestionController@question_import');
+Route::post('/e_learning2/question/import2', 'E_learning2_QuestionController@question_import2');
+Route::post('/e_learning2/question/upload', 'E_learning2_QuestionController@question_upload');
 Route::get('/e_learning2/question/answer/{e_groups_id}/{no}', 'E_learning2_QuestionController@answer_list');
 Route::get('/e_learning2/question/answer_g/{e_groups_id}/{no}/{q_no}', 'E_learning2_QuestionController@answer_graph');
 //グループ
