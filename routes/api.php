@@ -36,28 +36,27 @@ Route::get('/e_learning2/question/answer/{e_groups_id}/{no}', 'E_learning2_Quest
 Route::get('/e_learning2/question/answer_g/{e_groups_id}/{no}/{q_no}', 'E_learning2_QuestionController@answer_graph');
 //グループ
 Route::get('/e_learning2/groups_menu', 'E_learning2_GroupController@groups_menu');
-Route::get('/e_learning2/group', 'E_learning2_GroupController@group_index');
+Route::get('/e_learning2/group', 'E_learning2_GroupController@group_list');
 Route::get('/e_learning2/group/{id}', 'E_learning2_GroupController@group_show');
-Route::post('/e_learning2/group', 'E_learning2_GroupController@group_store');
+Route::post('/e_learning2/group', 'E_learning2_GroupController@group_create');
 Route::put('/e_learning2/group/{id}', 'E_learning2_GroupController@group_update');
 Route::delete('/e_learning2/group/{id}', 'E_learning2_GroupController@group_delete');
 Route::get('/e_learning2/owner_list/{e_groups_id}', 'E_learning2_GroupController@owner_list');
-Route::delete('/e_learning2/owner_list/{user_id}', 'E_learning2_GroupController@owner_list_delete');
-Route::get('/e_learning2/group_join/{e_groups_id}/{keyword}', 'E_learning2_GroupController@group_user_index');
-Route::post('/e_learning2/group_join/{e_groups_id}', 'E_learning2_GroupController@group_join');
+Route::delete('/e_learning2/owner_list/{user_id}', 'E_learning2_GroupController@owner_delete');
+Route::get('/e_learning2/group_join/{e_groups_id}/{keyword}', 'E_learning2_GroupController@owner_join_list');
+Route::post('/e_learning2/group_join/{e_groups_id}', 'E_learning2_GroupController@owner_join');
 //クラス
 Route::get('/e_learning2/classes_menu', 'E_learning2_ClassController@classes_menu');
-Route::get('/e_learning2/class_list/{e_groups_id}', 'E_learning2_ClassController@class_index');
+Route::get('/e_learning2/class_list/{e_groups_id}', 'E_learning2_ClassController@class_list');
 Route::get('/e_learning2/class/{id}', 'E_learning2_ClassController@class_show');
-Route::post('/e_learning2/class', 'E_learning2_ClassController@class_store');
+Route::post('/e_learning2/class', 'E_learning2_ClassController@class_create');
 Route::put('/e_learning2/class/{id}', 'E_learning2_ClassController@class_update');
 Route::delete('/e_learning2/class/{id}', 'E_learning2_ClassController@class_delete');
 Route::get('/e_learning2/member_list/{e_classes_id}', 'E_learning2_ClassController@member_list');
-Route::delete('/e_learning2/member_list/{user_id}', 'E_learning2_ClassController@member_list_delete');
+Route::delete('/e_learning2/member_list/{user_id}', 'E_learning2_ClassController@member_delete');
 Route::get('/e_learning2/member_list2/{e_classes_id}', 'E_learning2_ClassController@member_list2');
-Route::get('/e_learning2/class_join1/{e_classes_id}/{keyword}', 'E_learning2_ClassController@class_user_index');
-Route::post('/e_learning2/class_join1/{e_classes_id}', 'E_learning2_ClassController@class_join1');
-Route::post('/e_learning2/class_join2', 'E_learning2_ClassController@class_join2');
+Route::get('/e_learning2/class_join1/{e_classes_id}/{keyword}', 'E_learning2_ClassController@member_join_list');
+Route::post('/e_learning2/class_join1/{e_classes_id}', 'E_learning2_ClassController@member_join1');
 //実施設定
 Route::get('/e_learning2/section_menu2/{e_classes_id}', 'E_learning2_SettingController@section_menu2');
 Route::get('/e_learning2/select_title/{e_classes_id}', 'E_learning2_SettingController@select_title');
@@ -69,8 +68,9 @@ Route::get('/e_learning2/st/rand/{a_ptn}', 'E_learning2_StudentController@a_ptn'
 Route::post('/e_learning2/st/answer', 'E_learning2_StudentController@answer_record');
 Route::get('/e_learning2/st/answer/{id}/{e_classes_id}', 'E_learning2_StudentController@answer_list2');
 Route::delete('/e_learning2/st/answer/{id}', 'E_learning2_StudentController@answer_delete');
+Route::post('/e_learning2/class_join2', 'E_learning2_StudentController@member_join2');
 //ユーザ管理
-Route::get('/e_learning2/ad', 'E_learning2_UserController@user_index');
+Route::get('/e_learning2/ad', 'E_learning2_UserController@user_list');
 Route::get('/e_learning2/ad/{keyword}', 'E_learning2_UserController@user_search');
 Route::get('/e_learning2/ad/{id}', 'E_learning2_UserController@user_show');
 Route::post('/e_learning2/ad', 'E_learning2_UserController@user_create');

@@ -38,6 +38,30 @@ class AppServiceProvider extends ServiceProvider
       \App\Services\Setting_ServiceInterface::class,
       \App\Services\Setting_Service::class,
     );
+    $this->app->bind(
+      \App\Repositories\E_Group_RepositoryInterface::class,
+      \App\Repositories\E_Group_Repository::class,
+    );
+    $this->app->bind(
+      \App\Services\Group_ServiceInterface::class,
+      \App\Services\Group_Service::class,
+    );
+    $this->app->bind(
+      \App\Repositories\E_Owner_RepositoryInterface::class,
+      \App\Repositories\E_Owner_Repository::class,
+    );
+    $this->app->bind(
+      \App\Repositories\E_Class_RepositoryInterface::class,
+      \App\Repositories\E_Class_Repository::class,
+    );
+    $this->app->bind(
+      \App\Services\Class_ServiceInterface::class,
+      \App\Services\Class_Service::class,
+    );
+    $this->app->bind(
+      \App\Repositories\E_Member_RepositoryInterface::class,
+      \App\Repositories\E_Member_Repository::class,
+    );
   }
 
   /**

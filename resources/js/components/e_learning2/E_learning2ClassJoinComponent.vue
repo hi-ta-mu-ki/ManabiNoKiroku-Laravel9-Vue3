@@ -41,11 +41,10 @@ export default {
               this.$router.push(`/e_learning2/tc`)
             else if (this.$store.getters['auth_e_learning2/role'] == 10)
               this.$router.push(`/e_learning2/st`)
-          }
-        })
-        .catch((error) => {
+          }else{
             this.isMsg = true
             this.msg = 'パスコードがむこうか，すでにとうろくしています'
+          }
         })
     },
     cansel: function() {

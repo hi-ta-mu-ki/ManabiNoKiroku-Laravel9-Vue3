@@ -52,10 +52,10 @@ export default {
         .then((res) => {
           if(res.status== 200)
             this.$router.push({name: 'tc.classlist'})
-        })
-        .catch((error) => {
+          else{
             this.isMsg = true
             this.msg = 'すでに使用されているクラス名，または，パスコードです';
+          }
         })
     }
   },

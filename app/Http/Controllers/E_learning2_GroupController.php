@@ -2,94 +2,70 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Group_ServiceInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\E_group;
-use App\Models\E_owner;
-use App\Models\E_class;
-use App\Models\E_member;
 
-class E_learning2Controller extends Controller
+class E_learning2_GroupController extends Controller
 {
+  private Group_ServiceInterface $group_service;
+
+  public function __construct(Group_ServiceInterface $group_service)
+  {
+    $this->group_service = $group_service;
+  }
 
   public function groups_menu()
   {
-    $user_id = Auth::user()->id;
-    $items1 = E_member::where('user_id', $user_id)->select('e_classes_id')->getQuery();
-    $items2 = E_class::whereIn('id', $items1)->select('e_groups_id')->getQuery();
-    return E_group::whereIn('id', $items2)->get();
+    return $this->group_service->groups_menu();
   }
 
-  public function group_index()
+  public function group_list()
   {
-    $user_id =Auth::user()->id;
-    $items = E_owner::where('user_id', $user_id)->select('e_groups_id')->getQuery();
-    return E_group::whereIn('id', $items)->get();
+    return $this->group_service->group_list();
   }
 
-  public function group_show(E_group $id)
+  public function group_show($id)
   {
-    return $id;
+    return $this->group_service->group_show($id);
   }
 
-  public function group_store(Request $request)
+  public function group_create(Request $request)
   {
-    $e_group = E_group::where('name', $request->name)->first();
-    if($e_group != null) return response($request, 400);
-    $group = new E_group;
-    $group->name = $request->name;
-    $group->save();
-    $e_group = E_group::where('name', $request->name)->first();
-    $e_owner = new E_owner;
-    $e_owner->user_id = Auth::user()->id;
-    $e_owner->e_groups_id = $e_group->id;
-    $e_owner->save();
-    return response($request, 201);
+    $item = $request->only(['name']);
+    return $this->group_service->group_create($item);
+    
   }
 
-  public function group_update(Request $request, E_group $id)
+  public function group_update(Request $request, $id)
   {
-    $e_group = E_group::where('name', $request->name)->first();
-    if($e_group != null) return response($request, 400);
-    $id->update($request->all());
-    return $id;
+    $item = $request->only(['name']);
+    return $this->group_service->group_update($id, $item);
   }
 
-  public function group_destroy(E_group $id)
+  public function group_delete($id)
   {
-    $id->delete();
-    return $id;
+    return $this->group_service->group_delete($id);
   }
 
   public function owner_list($e_groups_id)
   {
-    return E_owner::where('e_groups_id', $e_groups_id)->with('user')->orderBy('user_id', 'asc')->get();
+    return $this->group_service->owner_list($e_groups_id);
   }
 
-  public function owner_list_delete($id)
+  public function owner_delete($id)
   {
-    E_owner::where('user_id', $id)->delete();
+    return $this->group_service->owner_delete($id);
   }
 
-  public function group_user_index($e_groups_id, $keyword)
+  public function owner_join_list($e_groups_id, $keyword)
   {
-    $e_owner = E_owner::where('e_groups_id', $e_groups_id)->select('user_id')->getQuery();
-    $add_owner = User::where('role', '!=', 1)->where('role', '!=', 10)->whereNotIn('id', $e_owner)->where('name', 'like', '%' . $keyword . '%')->select('id', 'name')->get();
-    return $add_owner;
+    return $this->group_service->owner_join_list($e_groups_id, $keyword);
   }
 
-  public function group_join($e_groups_id, Request $request)
+  public function owner_join($e_groups_id, Request $request)
   {
-    $user = E_owner::where('e_groups_id', $e_groups_id)->where('user_id', $request->id)->first();
-    if($user == null){
-      $e_owner = new E_owner;
-      $e_owner->user_id = $request->id;
-      $e_owner->e_groups_id = $e_groups_id;
-      $e_owner->save();
-      return response($request, 201);
-    }
-    else return response($request, 400);
+    $user_id = $request->id;
+    return $this->group_service->owner_join($e_groups_id, $user_id);
   }
 
 }
