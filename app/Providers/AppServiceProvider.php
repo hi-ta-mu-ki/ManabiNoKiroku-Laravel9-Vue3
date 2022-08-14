@@ -62,6 +62,14 @@ class AppServiceProvider extends ServiceProvider
       \App\Repositories\E_Member_RepositoryInterface::class,
       \App\Repositories\E_Member_Repository::class,
     );
+    $this->app->bind(
+      \App\Services\Student_ServiceInterface::class,
+      \App\Services\Student_Service::class,
+    );
+    $this->app->bind(
+      \App\Repositories\E_Answer_RepositoryInterface::class,
+      \App\Repositories\E_Answer_Repository::class,
+    );
   }
 
   /**

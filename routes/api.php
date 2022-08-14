@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,18 +56,17 @@ Route::delete('/e_learning2/member_list/{user_id}', 'E_learning2_ClassController
 Route::get('/e_learning2/member_list2/{e_classes_id}', 'E_learning2_ClassController@member_list2');
 Route::get('/e_learning2/class_join1/{e_classes_id}/{keyword}', 'E_learning2_ClassController@member_join_list');
 Route::post('/e_learning2/class_join1/{e_classes_id}', 'E_learning2_ClassController@member_join1');
+Route::post('/e_learning2/class_join2', 'E_learning2_ClassController@member_join2');
 //実施設定
 Route::get('/e_learning2/section_menu2/{e_classes_id}', 'E_learning2_SettingController@section_menu2');
 Route::get('/e_learning2/select_title/{e_classes_id}', 'E_learning2_SettingController@select_title');
 Route::put('/e_learning2/question_setting/{e_classes_id}', 'E_learning2_SettingController@question_setting');
 //生徒
 Route::get('/e_learning2/st_menu/{e_classes_id}', 'E_learning2_StudentController@st_menu');
-Route::get('/e_learning2/st/{e_classes_id}/{no}', 'E_learning2_StudentController@rdm_list');
-Route::get('/e_learning2/st/rand/{a_ptn}', 'E_learning2_StudentController@a_ptn');
+Route::get('/e_learning2/st/{e_classes_id}/{no}', 'E_learning2_StudentController@question_randomize');
 Route::post('/e_learning2/st/answer', 'E_learning2_StudentController@answer_record');
 Route::get('/e_learning2/st/answer/{id}/{e_classes_id}', 'E_learning2_StudentController@answer_list2');
 Route::delete('/e_learning2/st/answer/{id}', 'E_learning2_StudentController@answer_delete');
-Route::post('/e_learning2/class_join2', 'E_learning2_StudentController@member_join2');
 //ユーザ管理
 Route::get('/e_learning2/ad', 'E_learning2_UserController@user_list');
 Route::get('/e_learning2/ad/{keyword}', 'E_learning2_UserController@user_search');
