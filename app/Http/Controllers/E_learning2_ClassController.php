@@ -14,9 +14,9 @@ class E_learning2_ClassController extends Controller
     $this->class_service = $class_service;
   }
 
-  public function classes_menu()
+  public function classes_menu($user_id)
   {
-    return $this->class_service->classes_menu();
+    return $this->class_service->classes_menu($user_id);
   }
 
   public function class_list($e_groups_id)
@@ -29,16 +29,14 @@ class E_learning2_ClassController extends Controller
     return $this->class_service->class_show($id);
   }
 
-  public function class_create(Request $request)
+  public function class_create(Request $request, $user_id)
   {
-    $item = $request->only(['name', 'pass_code']);
-    return $this->class_service->class_create($item);
+    return $this->class_service->class_create($request, $user_id);
   }
 
   public function class_update(Request $request, $id)
   {
-    $item = $request->only(['name', 'pass_code']);
-    return $this->class_service->class_update($id, $item);
+    return $this->class_service->class_update($id, $request);
   }
 
   public function class_delete($id)
@@ -51,14 +49,14 @@ class E_learning2_ClassController extends Controller
     return $this->class_service->member_list($e_classes_id);
   }
 
-  public function member_delete($id)
+  public function member_delete($e_classes_id, $user_id)
   {
-    return $this->class_service->member_delete($id);
+    return $this->class_service->member_delete($e_classes_id, $user_id);
   }
 
-  public function member_list2($e_classes_id)
+  public function member_list_menu($e_classes_id)
   {
-    return $this->class_service->member_list2($e_classes_id);
+    return $this->class_service->member_list_menu($e_classes_id);
   }
 
   public function member_join_list($e_classes_id, $keyword)
@@ -66,16 +64,14 @@ class E_learning2_ClassController extends Controller
     return $this->class_service->member_join_list($e_classes_id, $keyword);
   }
 
-  public function member_join1($e_classes_id, Request $request)
+  public function member_join($e_classes_id, Request $request)
   {
-    $user_id = $request->id;
-    return $this->class_service->member_join($e_classes_id, $user_id);
+    return $this->class_service->member_join($e_classes_id, $request);
   }
 
-  public function member_join2(Request $request)
+  public function member_join_self(Request $request, $user_id)
   {
-    $pass_code = $request->pass_code;
-    return $this->class_service->member_join2($pass_code);
+    return $this->class_service->member_join_self($request, $user_id);
   }
 
 }

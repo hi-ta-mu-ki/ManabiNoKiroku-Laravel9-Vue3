@@ -44,12 +44,13 @@ export default {
       isClassSelect: false,
       section_titles: [],
       selected_titles: [],
-      e_classes_id: 0
+      e_classes_id: 0,
+      user_id: 0
     }
   },
   methods: {
     getClassesMenu() {
-      axios.get('/api/e_learning2/classes_menu')
+      axios.get('/api/e_learning2/classes_menu/' + this.user_id)
         .then((res) => {
           this.classes_menus = res.data
         })
@@ -79,6 +80,7 @@ export default {
     }
   },
   mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
     this.getClassesMenu();
   }
 }

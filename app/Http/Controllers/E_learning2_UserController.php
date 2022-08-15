@@ -32,15 +32,13 @@ class E_learning2_UserController extends Controller
 
   public function user_create(Request $request)
   {
-    $item = $request->only(['email', 'name', 'password_raw', 'role']);
-    $this->user_service->create($item);
+    $this->user_service->create($request);
     return response($request, 201);
   }
 
   public function user_update($id, Request $request)
   {
-    $item = $request->only(['email', 'name', 'password_raw', 'role']);
-    $this->user_service->update($id, $item);
+    $this->user_service->update($id, $request);
     return response($request, 200);
   }
 

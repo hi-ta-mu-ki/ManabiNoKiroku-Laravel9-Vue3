@@ -33,21 +33,13 @@ class E_learning2_QuestionController extends Controller
 
   public function question_create(Request $request)
   {
-    $item = $request->only([
-      'e_groups_id', 'no', 'q_no', 'quest',
-      'ans1', 'ans2', 'ans3', 'ans4', 'ans',
-      'exp1', 'exp2', 'exp3', 'exp4', 'exp0']);
-    $this->exercise_service->create($item);
+    $this->exercise_service->create($request);
     return response($request, 201);
   }
 
   public function question_update(Request $request, $id)
   {
-    $item = $request->only([
-      'e_groups_id', 'no', 'q_no', 'quest',
-      'ans1', 'ans2', 'ans3', 'ans4', 'ans',
-      'exp1', 'exp2', 'exp3', 'exp4', 'exp0']);
-    $this->exercise_service->update($id, $item);
+    $this->exercise_service->update($id, $request);
     return response($request, 200);
   }
 

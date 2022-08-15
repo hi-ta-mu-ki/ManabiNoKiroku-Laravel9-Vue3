@@ -104,12 +104,13 @@ export default {
       groups_menus: [],
       e_groups_id: 0,
       question: {},
-      showForm: false
+      showForm: false,
+      user_id: 0
     }
   },
   methods: {
     getGroupsMenu() {
-      axios.get('/api/e_learning2/groups_menu')
+      axios.get('/api/e_learning2/groups_menu/' + this.user_id)
         .then((res) => {
           this.groups_menus = res.data
         })
@@ -122,6 +123,7 @@ export default {
     }
   },
   mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
     this.getGroupsMenu()
   }
 }

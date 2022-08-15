@@ -31,16 +31,14 @@ export default {
       users: [],
       keyword: "",
       cnt: 0,
-      joinForm: {
-        id: 0
-      },
+      joinForm: {},
       msg: '',
       isMsg: false
     }
   },
   methods: {
     submit() {
-      axios.post('/api/e_learning2/class_join1/' + this.e_classes_id, this.joinForm)
+      axios.post('/api/e_learning2/class_join/' + this.e_classes_id, this.joinForm)
         .catch((error) => {
             this.isMsg = true
             this.msg = '登録できません'
@@ -49,7 +47,7 @@ export default {
   },
   watch: {
     keyword() {
-      axios.get('/api/e_learning2/class_join1/' + this.e_classes_id + '/' + this.keyword)
+      axios.get('/api/e_learning2/class_join/' + this.e_classes_id + '/' + this.keyword)
         .then((res) => {
           this.users = res.data
           this.cnt = this.users.length

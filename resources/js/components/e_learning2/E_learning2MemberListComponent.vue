@@ -90,12 +90,13 @@ export default {
       isClassSelect: false,
       users: [],
       e_classes_id: 0,
-      del_id: 0
+      st_id: 0,
+      user_id: 0
     }
   },
   methods: {
     getClassesMenu() {
-      axios.get('/api/e_learning2/classes_menu')
+      axios.get('/api/e_learning2/classes_menu/' + this.user_id)
         .then((res) => {
           this.classes_menus = res.data
         });
@@ -109,12 +110,12 @@ export default {
     member_update() {
       this.getUsers()
     },
-    member_delete:function(id) {
-      this.del_id = id
+    member_delete:function(user_id) {
+      this.st_id = user_id
     },
     delete_go() {
-      axios.delete('/api/e_learning2/st/answer/' + this.del_id)
-      axios.delete('/api/e_learning2/member_list/' + this.del_id)
+      axios.delete('/api/e_learning2/st/answer/' + this.e_classes_id + '/' + this.st_id)
+      axios.delete('/api/e_learning2/member_list/' + this.e_classes_id + '/' + this.st_id)
       this.getUsers()
     },
     jump: function() {
@@ -124,6 +125,7 @@ export default {
     },
   },
   mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
     this.getClassesMenu()
   }
 }

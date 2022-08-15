@@ -34,26 +34,28 @@
 <script>
 export default {
   props: {
-    groupId: 0
+    e_groups_id: 0
   },
   data: function () {
     return {
       clas: {},
       group: [],
       msg: '',
-      isMsg: false
+      isMsg: false,
+      user_id: 0
     }
   },
   methods: {
     getGroup() {
-      axios.get('/api/e_learning2/group/' + this.groupId)
+      axios.get('/api/e_learning2/group/' + this.e_groups_id)
         .then((res) => {
           this.group = res.data
         })
     },
     submit() {
-      this.clas.e_groups_id = this.groupId
-      axios.post('/api/e_learning2/class', this.clas)
+      this.user_id = this.$store.getters['auth_e_learning2/id']
+      this.clas.e_groups_id = this.e_groups_id
+      axios.post('/api/e_learning2/class/' + this.user_id, this.clas, )
         .then((res) => {
           if(res.status== 201)
             this.$router.push({name: 'tc.classlist'})

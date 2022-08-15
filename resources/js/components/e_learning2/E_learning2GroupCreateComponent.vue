@@ -24,12 +24,13 @@ export default {
     return {
       group: {},
       msg: '',
-      isMsg: false
+      isMsg: false,
+      user_id: 0
     }
   },
   methods: {
     submit() {
-      axios.post('/api/e_learning2/group', this.group)
+      axios.post('/api/e_learning2/group/' + this.user_id, this.group)
         .then((res) => {
           if(res.status== 201)
             this.$router.push({name: 'tc.grouplist'})
@@ -39,6 +40,9 @@ export default {
           }
         })
     }
+  },
+  mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
   }
 }
 </script>

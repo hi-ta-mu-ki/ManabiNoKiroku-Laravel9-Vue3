@@ -21,7 +21,7 @@
 <script>
 export default {
   props: {
-    groupId: 0
+    e_groups_id: 0
   },
   data: function () {
     return {
@@ -32,13 +32,13 @@ export default {
   },
   methods: {
     getGroup() {
-      axios.get('/api/e_learning2/group/' + this.groupId)
+      axios.get('/api/e_learning2/group/' + this.e_groups_id)
         .then((res) => {
           this.group = res.data
         })
     },
     submit() {
-      axios.put('/api/e_learning2/group/' + this.groupId, this.group)
+      axios.put('/api/e_learning2/group/' + this.e_groups_id, this.group)
         .then((res) => {
           if(res.status== 200)
             this.$router.push({name: 'tc.grouplist'})

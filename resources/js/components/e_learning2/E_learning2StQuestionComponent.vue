@@ -158,7 +158,7 @@ export default {
   },
   methods: {
     getClassesMenu() {
-      axios.get('/api/e_learning2/classes_menu')
+      axios.get('/api/e_learning2/classes_menu/' + this.user_id)
         .then((res) => {
           this.classes_menus = res.data
         })
@@ -237,8 +237,8 @@ export default {
     })
   },
   mounted() {
-    this.getClassesMenu()
     this.user_id = this.$store.getters['auth_e_learning2/id']
+    this.getClassesMenu()
   }
 }
 </script>

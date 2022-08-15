@@ -35,8 +35,9 @@ class Setting_Service implements Setting_ServiceInterface
     return $setting;
   }
 
-  public function question_setting($e_classes_id, $selected_titles)
+  public function question_setting($e_classes_id, $request)
   {
+    $selected_titles = $request->input();
     $i = 0;
     $e_groups_id = E_class::where('id', $e_classes_id)->select('e_groups_id')->getQuery();
     $section_titles = Exercise::whereIn('e_groups_id', $e_groups_id)->where('q_no', 0)->get();
@@ -57,6 +58,6 @@ class Setting_Service implements Setting_ServiceInterface
         }else $this->settingrepository->delete($e_classes_id, $section_title->no);
       }
     }
+    return response($request, 201);
   }
-
 }

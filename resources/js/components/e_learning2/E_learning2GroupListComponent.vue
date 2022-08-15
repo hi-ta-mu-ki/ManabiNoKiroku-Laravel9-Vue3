@@ -24,7 +24,7 @@
           <th scope="row">{{ group.id }}</th>
           <td>{{ group.name }}</td>
           <td>
-            <router-link v-bind:to="{name: 'tc.groupedit', params: {groupId: group.id }}">
+            <router-link v-bind:to="{name: 'tc.groupedit', params: {e_groups_id: group.id }}">
               <button class="btn btn-success text-white">編集</button>
             </router-link>
           </td>
@@ -32,12 +32,12 @@
             <button class="btn btn-danger text-white" @click="group_delete(group.id)" data-bs-toggle="modal" data-bs-target="#groupdelete_Modal">削除</button>
           </td>
           <td>
-            <router-link v-bind:to="{name: 'tc.owner', params: {groupId: group.id }}">
+            <router-link v-bind:to="{name: 'tc.owner', params: {e_groups_id: group.id }}">
               <button class="btn btn-success text-white">所有者一覧</button>
             </router-link>
           </td>
           <td>
-            <router-link v-bind:to="{name: 'tc.classlist', params: {groupId: group.id }}">
+            <router-link v-bind:to="{name: 'tc.classlist', params: {e_groups_id: group.id, userId: user_id }}">
               <button class="btn btn-success text-white">クラスを設定</button>
             </router-link>
           </td>
@@ -69,12 +69,13 @@ export default {
   data: function () {
     return {
       groups: [],
-      del_id: 0
+      del_id: 0,
+      user_id: 0
     }
   },
   methods: {
     getGroups() {
-      axios.get('/api/e_learning2/group')
+      axios.get('/api/e_learning2/group_list/' + this.user_id)
         .then((res) => {
           this.groups = res.data
         })
@@ -86,11 +87,12 @@ export default {
       this.del_id = id
     },
     delete_go() {
-      axios.delete('/api/e_learning2/group_list/' + this.del_id)
+      axios.delete('/api/e_learning2/group/' + this.del_id)
       this.getGroups()
     },
   },
   mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
     this.getGroups()
   }
 }

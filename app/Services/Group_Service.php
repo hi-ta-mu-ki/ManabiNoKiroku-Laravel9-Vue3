@@ -4,12 +4,12 @@ namespace App\Services;
 
 use App\Repositories\E_Group_RepositoryInterface;
 use App\Repositories\E_Owner_RepositoryInterface;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\E_group;
 use App\Models\E_owner;
 use App\Models\E_class;
 use App\Models\E_member;
+use App\Library\DataFormat;
 
 class Group_Service implements Group_ServiceInterface
 {
@@ -23,17 +23,15 @@ class Group_Service implements Group_ServiceInterface
     $this->owner_repository = $owner_repository;
   }
 
-  public function groups_menu()
+  public function groups_menu($user_id)
   {
-    $user_id = Auth::user()->id;
     $items1 = E_member::where('user_id', $user_id)->select('e_classes_id')->getQuery();
     $items2 = E_class::whereIn('id', $items1)->select('e_groups_id')->getQuery();
     return E_group::whereIn('id', $items2)->get();
   }
 
-  public function group_list()
+  public function group_list($user_id)
   {
-    $user_id = Auth::user()->id;
     $items = E_owner::where('user_id', $user_id)->select('e_groups_id')->getQuery();
     return E_group::whereIn('id', $items)->get();
   }
@@ -43,23 +41,21 @@ class Group_Service implements Group_ServiceInterface
     return $this->group_repository->show($id);
   }
 
-  public function group_create($item)
+  public function group_create($request, $user_id)
   {
-    $e_group = E_group::where('name', $item['name'])->first();
-    if($e_group != null) return response($item, 400);
+    $item = DataFormat::group_format($request);
     $this->group_repository->create($item);
     $e_group = E_group::where('name', $item['name'])->first();
     unset($item);
-    $item['user_id'] = Auth::user()->id;
+    $item['user_id'] = $user_id;
     $item['e_groups_id'] = $e_group->id;
     $this->owner_repository->create($item);
     return response($item, 201);;
   }
 
-  public function group_update($id, $item)
+  public function group_update($id, $request)
   {
-    $e_group = E_group::where('name', $item['name'])->first();
-    if($e_group != null) return response($item, 400);
+    $item = DataFormat::group_format($request);
     return $this->group_repository->update($id, $item);
   }
 
@@ -73,9 +69,9 @@ class Group_Service implements Group_ServiceInterface
     return E_owner::where('e_groups_id', $e_groups_id)->with('user')->orderBy('user_id', 'asc')->get();
   }
 
-  public function owner_delete($id)
+  public function owner_delete($e_groups_id, $user_id)
   {
-    $this->owner_repository->delete($id);
+    $this->owner_repository->delete($e_groups_id, $user_id);
   }
 
   public function owner_join_list($e_groups_id, $keyword)
@@ -84,17 +80,17 @@ class Group_Service implements Group_ServiceInterface
     return User::where('role', '!=', 1)->where('role', '!=', 10)->whereNotIn('id', $e_owner)->where('name', 'like', '%' . $keyword . '%')->select('id', 'name')->get();
   }
 
-  public function owner_join($e_groups_id, $user_id)
+  public function owner_join($e_groups_id, $request)
   {
-    $user = E_owner::where('e_groups_id', $e_groups_id)->where('user_id', $user_id)->first();
+    $user = E_owner::where('e_groups_id', $e_groups_id)->where('user_id', $request->id)->first();
     if($user == null){
       $item = array();
-      $item['user_id'] = $user_id;
+      $item['user_id'] = $request->id;
       $item['e_groups_id'] = $e_groups_id;
       $this->owner_repository->create($item);
-      return response($user_id, 201);
+      return response($request, 201);
     }
-    else return response($user_id, 400);
+    else return response($request, 400);
   }
 
 }

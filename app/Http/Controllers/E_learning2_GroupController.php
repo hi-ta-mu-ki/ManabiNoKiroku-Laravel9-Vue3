@@ -14,14 +14,14 @@ class E_learning2_GroupController extends Controller
     $this->group_service = $group_service;
   }
 
-  public function groups_menu()
+  public function groups_menu($user_id)
   {
-    return $this->group_service->groups_menu();
+    return $this->group_service->groups_menu($user_id);
   }
 
-  public function group_list()
+  public function group_list($user_id)
   {
-    return $this->group_service->group_list();
+    return $this->group_service->group_list($user_id);
   }
 
   public function group_show($id)
@@ -29,17 +29,15 @@ class E_learning2_GroupController extends Controller
     return $this->group_service->group_show($id);
   }
 
-  public function group_create(Request $request)
+  public function group_create(Request $request, $user_id)
   {
-    $item = $request->only(['name']);
-    return $this->group_service->group_create($item);
+    return $this->group_service->group_create($request, $user_id);
     
   }
 
   public function group_update(Request $request, $id)
   {
-    $item = $request->only(['name']);
-    return $this->group_service->group_update($id, $item);
+    return $this->group_service->group_update($id, $request);
   }
 
   public function group_delete($id)
@@ -52,9 +50,9 @@ class E_learning2_GroupController extends Controller
     return $this->group_service->owner_list($e_groups_id);
   }
 
-  public function owner_delete($id)
+  public function owner_delete($e_groups_id, $user_id)
   {
-    return $this->group_service->owner_delete($id);
+    return $this->group_service->owner_delete($e_groups_id, $user_id);
   }
 
   public function owner_join_list($e_groups_id, $keyword)
@@ -64,8 +62,7 @@ class E_learning2_GroupController extends Controller
 
   public function owner_join($e_groups_id, Request $request)
   {
-    $user_id = $request->id;
-    return $this->group_service->owner_join($e_groups_id, $user_id);
+    return $this->group_service->owner_join($e_groups_id, $request);
   }
 
 }

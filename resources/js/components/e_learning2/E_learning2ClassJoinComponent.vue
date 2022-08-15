@@ -25,16 +25,15 @@
 export default {
   data: function () {
     return {
-      joinForm: {
-        pass_code: '',
-      },
+      joinForm: {},
       msg: '',
-      isMsg: false
+      isMsg: false,
+      user_id: 0
     }
   },
   methods: {
     submit() {
-      axios.post('/api/e_learning2/class_join2', this.joinForm)
+      axios.post('/api/e_learning2/class_join_self/' + this.user_id, this.joinForm)
         .then((res) => {
           if(res.status == 201){
             if (this.$store.getters['auth_e_learning2/role'] == 5)
@@ -54,5 +53,8 @@ export default {
               this.$router.push(`/e_learning2/st`)
     }
   },
+  mounted(){
+    this.user_id = this.$store.getters['auth_e_learning2/id']
+  }
 }
 </script>

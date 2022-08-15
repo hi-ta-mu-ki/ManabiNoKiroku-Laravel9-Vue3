@@ -13,7 +13,7 @@
           </div>
           <div class="form-group row">
             <label for="password" class="col-sm-2 col-form-label text-primary">パスワード</label>
-            <input type="text" class="col-sm-10 form-control text-primary" id="password" v-model="user.password">
+            <input type="text" class="col-sm-10 form-control text-primary" id="password" v-model="user.password_raw">
           </div>
           <div class="form-group row">
             <label for="role" class="col-sm-2 col-form-label">役割</label>
@@ -48,8 +48,7 @@ export default {
       axios.get('/api/e_learning2/ad/' + this.userId)
         .then((res) => {
           this.user = res.data
-          if(this.user.role < 6) this.user.password = null
-          else this.user.password = this.user.password_raw
+          if(this.user.role < 6) this.user.password_raw = null
         })
     },
     submit() {

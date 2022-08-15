@@ -31,6 +31,7 @@
 <script>
 export default {
   props: {
+    e_groups_id: 0,
     classId: 0
   },
   data: function () {
@@ -48,6 +49,7 @@ export default {
         })
     },
     submit() {
+      this.clas.e_groups_id = this.e_groups_id
       axios.put('/api/e_learning2/class/' + this.classId, this.clas)
         .then((res) => {
           if(res.status== 200)

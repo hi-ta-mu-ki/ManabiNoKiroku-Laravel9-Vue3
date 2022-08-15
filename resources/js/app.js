@@ -132,7 +132,7 @@ const router = createRouter({
             component: E_learning2GroupCreateComponent
           },
           {
-            path: 'group/:groupId',
+            path: 'group/:e_groups_id',
             name: 'tc.groupedit',
             component: E_learning2GroupEditComponent,
             props: true
@@ -144,19 +144,19 @@ const router = createRouter({
             props: true
           },
           {
-            path: 'class/list/:groupId',
+            path: 'class/list/:e_groups_id',
             name: 'tc.classlist',
             component: E_learning2ClassListComponent,
             props: true
           },
           {
-            path: 'class/create/:groupId',
+            path: 'class/create/:e_groups_id',
             name: 'tc.classcreate',
             component: E_learning2ClassCreateComponent,
             props: true
           },
           {
-            path: 'class/:groupId',
+            path: 'class/:e_groups_id',
             name: 'tc.classedit',
             component: E_learning2ClassEditComponent,
             props: true
@@ -285,12 +285,13 @@ const router = createRouter({
 // }
 // createApp3()
 
+// store.dispatch('auth_e_learning2/currentUser')
 const app = createApp(E_learning2_App)
 app.use(router)
 app.use(store)
 
 const overridenOptions = {
-  allowedTags: ['img']
+  allowedTags: ['br', 'sup', 'sub', 'img']
 };
 app.use(Vue3Sanitize, overridenOptions);
 app.mount('#app3')

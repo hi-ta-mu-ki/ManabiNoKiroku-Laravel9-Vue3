@@ -139,7 +139,7 @@ export default {
     getUsers(page) {
       let api_url ="/api/e_learning2/ad?page=" + page
       if (this.keyword != "")
-        api_url = "/api/e_learning2/ad/" + this.keyword + "?page=" + page
+        api_url = "/api/e_learning2/ad/search/" + this.keyword + "?page=" + page
       axios.get(api_url)
         .then((res) => {
           this.users = res.data.data;
@@ -157,9 +157,6 @@ export default {
     },
     submit(){
       this.getUsers(1)
-    },
-    user_update() {
-      this.getUsers(page)
     },
     user_delete: function (id) {
       this.del_id = id

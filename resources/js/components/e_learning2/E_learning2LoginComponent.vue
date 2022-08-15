@@ -22,13 +22,13 @@
               </div>
               <div class="row mb-3">
                 <label for="login-password" class="col-form-label col-sm-4 text-sm-end">パスワード</label>
-                <input type="password" class="col-sm-6" id="login-password" v-model="loginForm.password" placeholder="パスワード">
+                <input type="password" class="col-sm-6" id="login-password" v-model="loginForm.password" autocomplete="off" placeholder="パスワード">
               </div>
               <div v-if="loginErrors" class="errors">
-                <div v-if="loginErrors.email" class="alert-danger mb-3">
+                <div v-if="loginErrors.email" class="alert alert-danger mb-3">
                   <div v-for="msg in loginErrors.email" :key="msg">{{ msg }}</div>
                 </div>
-                <div v-if="loginErrors.password" class="alert-danger mb-3">
+                <div v-if="loginErrors.password" class="alert alert-danger mb-3">
                   <div v-for="msg in loginErrors.password" :key="msg">{{ msg }}</div>
                 </div>
               </div>

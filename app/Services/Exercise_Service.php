@@ -37,14 +37,14 @@ class Exercise_Service implements Exercise_ServiceInterface
     return $this->exercise_repository->show($id);
   }
 
-  public function create($item)
+  public function create($request)
   {
-    return $this->exercise_repository->create($item);
+    return $this->exercise_repository->create($request->all());
   }
 
-  public function update($id, $item)
+  public function update($id, $request)
   {
-    return $this->exercise_repository->update($id, $item);
+    return $this->exercise_repository->update($id, $request->all());
   }
 
   public function delete($id)

@@ -26,9 +26,7 @@ class E_learning2_SettingController extends Controller
 
   public function question_setting($e_classes_id, Request $request)
   {
-    $selected_titles = $request->input();
-    $this->settingservice->question_setting($e_classes_id, $selected_titles);
-    return response($request, 201);
+    return $this->settingservice->question_setting($e_classes_id, $request);
   }
 
 }

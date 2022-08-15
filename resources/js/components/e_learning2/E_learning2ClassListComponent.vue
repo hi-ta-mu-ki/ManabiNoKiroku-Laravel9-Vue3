@@ -3,7 +3,7 @@
     <h2 class="title">クラス一覧</h2>
     <div class="bg-primary mb-1">
       <div class="p-1 mb-1 bg-primary row">
-        <router-link v-bind:to="{name: 'tc.classcreate', params: {groupId: groupId}}">
+        <router-link v-bind:to="{name: 'tc.classcreate', params: {e_groups_id: e_groups_id}}">
           <button class="btn btn-success text-white">クラスを追加</button>
         </router-link>
       </div>
@@ -24,7 +24,7 @@
           <td>{{ item.name }}</td>
           <td>{{ item.pass_code }}</td>
           <td>
-            <router-link v-bind:to="{name: 'tc.classedit', params: {classId: item.id}}">
+            <router-link v-bind:to="{name: 'tc.classedit', params: {e_groups_id: e_groups_id, classId: item.id}}">
               <button class="btn btn-success text-white">編集</button>
             </router-link>
           </td>
@@ -57,7 +57,7 @@
 <script>
 export default {
   props: {
-    groupId: 0
+    e_groups_id: 0
   },
   data: function () {
     return {
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     getClasses() {
-      axios.get('/api/e_learning2/class_list/' + this.groupId)
+      axios.get('/api/e_learning2/class_list/' + this.e_groups_id)
         .then((res) => {
           this.items = res.data
         })

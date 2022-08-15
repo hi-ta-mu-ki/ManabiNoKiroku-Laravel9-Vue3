@@ -15,7 +15,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <OwnerAdd :e_groups_id="groupId" />
+                  <OwnerAdd :e_groups_id="e_groups_id" />
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" @click="owner_update" data-bs-dismiss="modal">Close</button>
@@ -71,19 +71,19 @@ export default {
     OwnerAdd
   },
   props: {
-    groupId: 0
+    e_groups_id: 0
   },
   data: function () {
     return {
       users: [],
       cnt: 0,
-      del_id: 0
+      user_id: 0
 
     }
   },
   methods: {
     getUsers() {
-      axios.get('/api/e_learning2/owner_list/' + this.groupId)
+      axios.get('/api/e_learning2/owner_list/' + this.e_groups_id)
         .then((res) => {
           this.users = res.data
           this.cnt = this.users.length
@@ -93,15 +93,15 @@ export default {
       this.getUsers()
     },
     owner_delete:function(user_id) {
-      this.del_id = user_id
+      this.user_id = user_id
     },
     delete_go() {
-      axios.delete('/api/e_learning2/owner_list/' + this.del_id)
+      axios.delete('/api/e_learning2/owner_list/' + this.e_groups_id + '/' + this.user_id)
       this.getUsers()
     },
   },
   mounted() {
-    this.$store.commit('auth_e_learning2/setE_Groups_Id', this.groupId)
+    this.$store.commit('auth_e_learning2/setE_Groups_Id', this.e_groups_id)
     this.getUsers()
   }
 }

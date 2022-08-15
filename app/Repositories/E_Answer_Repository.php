@@ -11,8 +11,8 @@ class E_Answer_Repository implements E_Answer_RepositoryInterface
     return E_Answer::create($item);
   }
 
-  public function delete($id)
+  public function delete($user_id, $e_classes_id)
   {
-    return E_answer::where('user_id', $id)->delete();
+    return E_answer::where('user_id', $user_id)->where('e_classes_id', $e_classes_id)->delete();
   }
 }

@@ -3,13 +3,11 @@
 namespace App\Services;
 
 use App\Repositories\E_Answer_RepositoryInterface;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Exercise;
 use App\Models\Ans_pattern;
 use App\Models\E_answer;
 use App\Models\E_setting;
 use App\Models\E_class;
-use App\Models\E_member;
 
 class Student_Service implements Student_ServiceInterface
 {
@@ -63,15 +61,16 @@ class Student_Service implements Student_ServiceInterface
     return $questions;
   }
 
-  public function answer_create($item)
+  public function answer_create($request)
   {
+    $item = $request->only(['user_id', 'e_classes_id', 's_id', 'no', 'q_no', 'ans', 'correct']);
     $this->answer_repository->create($item);
     return  response($item, 201);
   }
 
-  public function answer_list2($id, $e_classes_id)
+  public function answer_list2($user_id, $e_classes_id)
   {
-    $answers = E_answer::where('user_id', $id)->where('e_classes_id', $e_classes_id)->orderBy('no', 'asc')->orderBy('s_id', 'desc')->orderBy('q_no', 'asc')->get();
+    $answers = E_answer::where('user_id', $user_id)->where('e_classes_id', $e_classes_id)->orderBy('no', 'asc')->orderBy('s_id', 'desc')->orderBy('q_no', 'asc')->get();
     $answer_lists = array(array());
     $i = -1;
     $tmp_s_id = 0;
@@ -91,9 +90,9 @@ class Student_Service implements Student_ServiceInterface
     return $answer_lists;
   }
 
-  public function answer_delete($id)
+  public function answer_delete($user_id, $e_classes_id)
   {
-    return $this->answer_repository->delete($id);
+    return $this->answer_repository->delete($user_id, $e_classes_id);
   }
 
 }

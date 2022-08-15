@@ -17,7 +17,7 @@
           <div v-if="isClassSelect" class="row">
             <label for="selectuser" class="col-form-label col-sm-2 me-2 text-end">生徒を選択：</label>
             <div class="col-sm-3">
-              <select class="form-select" id="selectuser" @change="jump2" v-model="user_id">
+              <select class="form-select" id="selectuser" @change="jump2" v-model="st_id">
                 <option v-for="user in users" :key="user.user_id" v-bind:value="user.user_id" >{{ user.name }}</option>
               </select>
             </div>
@@ -56,25 +56,26 @@ export default {
       e_classes_id: 0,
       answers: [],
       n: 0,
-      user_id: 0,
-      isUserSelect: false
+      st_id: 0,
+      isUserSelect: false,
+      user_id: 0
     }
   },
   methods: {
     getClassesMenu() {
-      axios.get('/api/e_learning2/classes_menu')
+      axios.get('/api/e_learning2/classes_menu/' + this.user_id)
         .then((res) => {
           this.classes_menus = res.data
         })
     },
     getUsers() {
-      axios.get('/api/e_learning2/member_list2/' + this.e_classes_id)
+      axios.get('/api/e_learning2/member_list_menu/' + this.e_classes_id)
         .then((res) => {
           this.users = res.data
         })
     },
     getAnswers() {
-      axios.get('/api/e_learning2/st/answer/'+ this.user_id + '/' + this.$store.getters['auth_e_learning2/e_classes_id'])
+      axios.get('/api/e_learning2/st/answer/'+ this.st_id + '/' + this.$store.getters['auth_e_learning2/e_classes_id'])
         .then((res) => {
           this.answers = res.data
           for(let i = 0; i < this.answers.length; i++) {
@@ -99,6 +100,7 @@ export default {
     },
   },
   mounted() {
+    this.user_id = this.$store.getters['auth_e_learning2/id']
     this.getClassesMenu()
   }
 }
