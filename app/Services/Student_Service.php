@@ -3,36 +3,51 @@
 namespace App\Services;
 
 use App\Repositories\E_Answer_RepositoryInterface;
-use App\Models\Exercise;
-use App\Models\Ans_pattern;
-use App\Models\E_answer;
-use App\Models\E_setting;
-use App\Models\E_class;
+use App\Services\Ans_pattern_Query_ServiceInterface;
+use App\Services\Answer_Query_ServiceInterface;
+use App\Services\Class_Query_ServiceInterface;
+use App\Services\Exercise_Query_ServiceInterface;
+use App\Services\Setting_Query_ServiceInterface;
 
 class Student_Service implements Student_ServiceInterface
 {
   private $answer_repository;
+  private $ans_pattern_query_service;
+  private $answer_query_service;
+  private $class_query_service;
+  private $exercise_query_service;
+  private $setting_query_service;
 
   public function __construct(
-    E_Answer_RepositoryInterface $answer_repository
+    E_Answer_RepositoryInterface $answer_repository,
+    Ans_pattern_Query_ServiceInterface $ans_pattern_query_service,
+    Answer_Query_ServiceInterface $answer_query_service,
+    Class_Query_ServiceInterface $class_query_service,
+    Exercise_Query_ServiceInterface $exercise_query_service,
+    Setting_Query_ServiceInterface $setting_query_service
   ) {
     $this->answer_repository = $answer_repository;
+    $this->ans_pattern_query_service = $ans_pattern_query_service;
+    $this->answer_query_service = $answer_query_service;
+    $this->class_query_service = $class_query_service;
+    $this->exercise_query_service = $exercise_query_service;
+    $this->setting_query_service = $setting_query_service;
   }
 
   public function st_menu($e_classes_id)
   {
-    $selected_titles = E_setting::where('e_classes_id', $e_classes_id)->select('no')->getQuery();
-    $e_groups_id = E_class::where('id', $e_classes_id)->select('e_groups_id')->getQuery();
-    return Exercise::where('q_no', 0)->whereIn('e_groups_id', $e_groups_id)->whereIn('no', $selected_titles)->get();
+    $selected_titles = $this->setting_query_service->get_setting_to_title($e_classes_id);
+    $e_groups_id =$this->class_query_service->get_class_to_group($e_classes_id);
+    return $this->exercise_query_service->get_group_to_menu($e_groups_id, $selected_titles);
   }
 
   public function question_randomize($e_classes_id, $no)
   {
-    $e_groups_id = E_class::where('id', $e_classes_id)->select('e_groups_id')->getQuery();
-    $questions = Exercise::whereIn('e_groups_id', $e_groups_id)->where('no', $no)->where('q_no', '>', '0')->get();
+    $e_groups_id = $this->class_query_service->get_class_to_group($e_classes_id);
+    $questions = $this->exercise_query_service->get_group_to_question($e_groups_id, $no);
     foreach($questions as $question){
       $a_ptn = mt_rand(1, 24);
-      $a_ptn_w = Ans_pattern::where('id', $a_ptn)->first();
+      $a_ptn_w = $this->ans_pattern_query_service->get_ans_ptn($a_ptn);
       $a_ptn_list = array();
       $a_ptn_list[0] = $a_ptn_w->ans1;
       $a_ptn_list[1] = $a_ptn_w->ans2;
@@ -68,9 +83,9 @@ class Student_Service implements Student_ServiceInterface
     return  response($item, 201);
   }
 
-  public function answer_list2($user_id, $e_classes_id)
+  public function answer_my_list($user_id, $e_classes_id)
   {
-    $answers = E_answer::where('user_id', $user_id)->where('e_classes_id', $e_classes_id)->orderBy('no', 'asc')->orderBy('s_id', 'desc')->orderBy('q_no', 'asc')->get();
+    $answers = $this->answer_query_service->get_user_to_answer($user_id, $e_classes_id);
     $answer_lists = array(array());
     $i = -1;
     $tmp_s_id = 0;
@@ -79,7 +94,7 @@ class Student_Service implements Student_ServiceInterface
         $i++;
         $tmp_s_id = $answer->s_id;
         $answer_lists[$i][0] = $answer->s_id;
-        $sections = Exercise::where('no', $answer->no)->where('q_no', 0)->first();
+        $sections = $this->exercise_query_service->get_answer_to_question($answer);
         $answer_lists[$i][1] = $sections->quest;
         $answer_lists[$i][2] = $answer->created_at->format('Y年m月d日 H時i分s秒');
         $j = 3;

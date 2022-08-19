@@ -19,9 +19,9 @@
             <label for="role" class="col-sm-2 col-form-label">役割</label>
             <select class="col-sm-10 form-control" v-model="user.role">
               <option value="">Select Role</option>
-              <option v-bind:value="1">管理者</option>
-              <option v-bind:value="5">教　員</option>
-              <option v-bind:value="10">生　徒</option>
+              <option v-bind:value="USER_ROLE.admin">管理者</option>
+              <option v-bind:value="USER_ROLE.teacher">教　員</option>
+              <option v-bind:value="USER_ROLE.student">生　徒</option>
             </select>
           </div>
           <div class="mt-4">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import USER_ROLE from "../../const"
 export default {
   props: {
     userId: 0
@@ -41,6 +42,7 @@ export default {
   data: function () {
     return {
       user: {},
+      USER_ROLE
     }
   },
   methods: {
@@ -48,7 +50,7 @@ export default {
       axios.get('/api/e_learning2/ad/' + this.userId)
         .then((res) => {
           this.user = res.data
-          if(this.user.role < 6) this.user.password_raw = null
+          if(this.user.role <= USER_ROLE.teacher) this.user.password_raw = null
         })
     },
     submit() {

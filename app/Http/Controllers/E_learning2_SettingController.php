@@ -14,9 +14,9 @@ class E_learning2_SettingController extends Controller
     $this->settingservice = $settingservice;
   }
 
-  public function section_menu2($e_classes_id)
+  public function section_menu($e_classes_id)
   {
-    return $this->settingservice->section_menu2($e_classes_id);
+    return $this->settingservice->section_menu($e_classes_id);
   }
 
   public function select_title($e_classes_id)

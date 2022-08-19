@@ -26,12 +26,12 @@
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <div v-if="user.role != 10">********</div>
+            <div v-if="user.role != USER_ROLE.student">********</div>
             <div v-else>{{ user.password_raw }}</div>
           </td>
           <td>
-            <div v-if="user.role == 1">管理者</div>
-            <div v-else-if="user.role == 5">教員</div>
+            <div v-if="user.role == USER_ROLE.admin">管理者</div>
+            <div v-else-if="user.role == USER_ROLE.teacher">教員</div>
             <div v-else>生徒</div>
           </td>
           <td>
@@ -122,6 +122,7 @@
 </template>
 
 <script>
+import USER_ROLE from "../../const"
 export default {
   data: function () {
     return {
@@ -133,6 +134,7 @@ export default {
       from: 0,
       to: 0,
       keyword: "",
+      USER_ROLE
     };
   },
   methods: {
@@ -144,7 +146,7 @@ export default {
         .then((res) => {
           this.users = res.data.data;
           for (var i = 0; i < this.users.length; i++)
-            if (this.users[i].role != 10) this.users[i].password = null;
+            if (this.users[i].role != USER_ROLE.student) this.users[i].password = null;
           this.current_page = res.data.current_page
           this.last_page = res.data.last_page
           this.total = res.data.total

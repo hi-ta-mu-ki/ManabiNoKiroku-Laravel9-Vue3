@@ -4,32 +4,41 @@ namespace App\Services;
 
 use App\Repositories\E_Class_RepositoryInterface;
 use App\Repositories\E_Member_RepositoryInterface;
+use App\Services\Class_Query_ServiceInterface;
+use App\Services\Member_Query_ServiceInterface;
+use App\Services\User_Query_ServiceInterface;
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\E_class;
-use App\Models\E_member;
 
 class Class_Service implements Class_ServiceInterface
 {
   private $class_repository;
+  private $class_query_service;
+  private $member_query_service;
+  private $user_query_service;
 
   public function __construct(
     E_Class_RepositoryInterface $class_repository,
-    E_Member_RepositoryInterface $member_repository
+    E_Member_RepositoryInterface $member_repository,
+    Class_Query_ServiceInterface $class_query_service,
+    Member_Query_ServiceInterface $member_query_service,
+    User_Query_ServiceInterface $user_query_service
   ) {
     $this->class_repository = $class_repository;
     $this->member_repository = $member_repository;
+    $this->class_query_service = $class_query_service;
+    $this->member_query_service = $member_query_service;
+    $this->user_query_service = $user_query_service;
   }
 
   public function classes_menu($user_id)
   {
-    $items = E_member::where('user_id', $user_id)->select('e_classes_id')->getQuery();
-    return E_class::whereIn('id', $items)->get();
+    $items = $this->member_query_service->get_user_to_class($user_id);
+    return $this->class_query_service->get_class_to_menu($items);
   }
 
   public function class_list($e_groups_id)
   {
-    return E_class::where('e_groups_id', $e_groups_id)->get();
+    return $this->class_query_service->get_class_list($e_groups_id);
   }
 
   public function class_show($id)
@@ -39,13 +48,13 @@ class Class_Service implements Class_ServiceInterface
 
   public function class_create($request, $user_id)
   {
-    $e_class_name = E_class::where('name', $request->name)->first();
-    if ($request->pass_code != null) $e_class_pass_code = E_class::where('pass_code', $request->pass_code)->first();
+    $e_class_name = $this->class_query_service->get_class_name($request);
+    if ($request->pass_code != null) $e_class_pass_code = $this->class_query_service->get_pass_code($request);
     else $e_class_pass_code = null;
     if($e_class_name != null || $e_class_pass_code != null) return response($request, 400);
     $this->class_repository->create($request->all());
     unset($item);
-    $e_class_name = E_class::where('name', $request->name)->first();
+    $e_class_name = $this->class_query_service->get_class_name($request);
     $item['user_id'] = $user_id;
     $item['e_classes_id'] = $e_class_name->id;
     $this->member_repository->create($item);
@@ -54,8 +63,8 @@ class Class_Service implements Class_ServiceInterface
 
   public function class_update($id, $request)
   {
-    $e_class_name = E_class::where('id', '<>', $id)->where('name', $request->name)->first();
-    if ($request->pass_code != null) $e_class_pass_code = E_class::where('id', '<>', $id)->where('pass_code', $request->pass_code)->first();
+    $e_class_name = $this->class_query_service->get_class_name_me_not($id, $request);
+    if ($request->pass_code != null) $e_class_pass_code = $this->class_query_service->get_class_pass_code_me_not($id, $request);
     else $e_class_pass_code = null;
     if($e_class_name != null || $e_class_pass_code != null) return response($request, 400);
     $item = $request->all();
@@ -71,7 +80,7 @@ class Class_Service implements Class_ServiceInterface
 
   public function member_list($e_classes_id)
   {
-    return E_member::where('e_classes_id', $e_classes_id)->with('user')->orderBy('user_id', 'asc')->get();
+    return $this->member_query_service->get_member_list($e_classes_id);
   }
 
   public function member_delete($e_classes_id, $user_id)
@@ -81,18 +90,18 @@ class Class_Service implements Class_ServiceInterface
 
   public function member_list_menu($e_classes_id)
   {
-    return E_member::select('user_id','name')->join('users', 'users.id','=','e_members.user_id')->where('e_classes_id', $e_classes_id)->where('role', 10)->orderBy('user_id', 'asc')->get();
+    return $this->member_query_service->get_member_list_menu($e_classes_id);
   }
 
   public function member_join_list($e_classes_id, $keyword)
   {
-    $e_member = E_member::where('e_classes_id', $e_classes_id)->select('user_id')->getQuery();
-    return User::where('role', '!=', 1)->whereNotIn('id', $e_member)->where('name', 'like', '%' . $keyword . '%')->select('id', 'name')->get();
+    $e_member = $this->member_query_service->get_class_to_user($e_classes_id);
+    return $this->user_query_service->get_member_join_list($e_member, $keyword);
   }
 
   public function member_join($e_classes_id, $request)
   {
-    $user = E_member::where('e_classes_id', $e_classes_id)->where('user_id', $request->id)->first();
+    $user = $this->member_query_service->get_member_join($e_classes_id, $request);
     if($user == null){
       $item = array();
       $item['user_id'] = $request->id;
@@ -106,8 +115,8 @@ class Class_Service implements Class_ServiceInterface
   public function member_join_self($request, $user_id)
   {
     if($request->pass_code != null){
-      $e_class = E_class::where('pass_code', $request->pass_code)->first();
-      $user = E_member::where('e_classes_id', $e_class->id)->where('user_id', $user_id)->first();
+      $e_class = $this->class_query_service->get_pass_code($request);
+      $user = $this->member_query_service->get_class_to_user_one($e_class, $user_id);
       if($e_class == null || $e_class->updated_at < date("Y-m-d",strtotime("-10 day")) || $user != null) return response($request, 400);
       else{
         $item = array();

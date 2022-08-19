@@ -48,6 +48,8 @@ import E_learning2UserCreateComponent from "./components/e_learning2/E_learning2
 import E_learning2UserEditComponent from "./components/e_learning2/E_learning2UserEditComponent";
 import E_learning2UserCsvComponent from "./components/e_learning2/E_learning2UserCsvComponent";
 
+import USER_ROLE from "./const";
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -75,11 +77,11 @@ const router = createRouter({
       path: '/e_learning2/login',
       component: E_learning2LoginComponent,
       beforeEnter (to, from, next) {
-        if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == 5) {
+        if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == USER_ROLE.teacher) {
           next('/e_learning2/tc')
-        } else if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == 10) {
+        } else if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == USER_ROLE.student) {
           next('/e_learning2/st')
-        } else if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == 1) {
+        } else if (store.getters['auth_e_learning2/check'] && store.getters['auth_e_learning2/role'] == USER_ROLE.admin) {
           next('/e_learning2/ad')
         } else {
           next()
