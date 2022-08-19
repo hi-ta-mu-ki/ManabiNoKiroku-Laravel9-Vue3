@@ -61,7 +61,7 @@ export default {
       this.getSelectedTitles()
     },
     getSectionTitles() {
-      axios.get('/api/e_learning2/section_menu2/' + this.e_classes_id)
+      axios.get('/api/e_learning2/section_menu/' + this.e_classes_id)
         .then((res) => {
           this.section_titles = res.data
         })

@@ -10,6 +10,8 @@ use App\Facades\Csv;
 use SplFileObject;
 use App\Library\DataFormat;
 
+use App\Models\User;
+
 class User_Service implements User_ServiceInterface
 {
   private $user_repository;
@@ -96,7 +98,7 @@ class User_Service implements User_ServiceInterface
       $user['name'] = $value['name'];
       $user['email'] = $value['email'];
       $user['password'] = Hash::make($value['password']);
-      if ($value['role'] > 5)
+      if ($value['role'] > User::TEACHER)
         $user['password_raw'] = $value['password'];
       $user['role'] = $value['role'];
       $this->user_repository->create($user);
@@ -128,7 +130,7 @@ class User_Service implements User_ServiceInterface
         $email = mb_convert_encoding($row[1], 'UTF-8', 'SJIS');
         $password = Hash::make(mb_convert_encoding($row[2], 'UTF-8', 'SJIS'));
         $role = mb_convert_encoding($row[3], 'UTF-8', 'SJIS');
-        if ($role > 5) $password_raw = mb_convert_encoding($row[2], 'UTF-8', 'SJIS');
+        if ($role > User::TEACHER) $password_raw = mb_convert_encoding($row[2], 'UTF-8', 'SJIS');
         else $password_raw = null;
         $csvimport_array = [
           'name' => $name,

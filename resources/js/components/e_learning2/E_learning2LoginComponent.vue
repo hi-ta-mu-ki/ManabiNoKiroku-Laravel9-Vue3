@@ -47,6 +47,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import USER_ROLE from "../../const"
 export default {
   data () {
     return {
@@ -66,11 +67,11 @@ export default {
       await this.$store.dispatch('auth_e_learning2/login', this.loginForm)
       if (this.apiStatus) {
         // トップページに移動する
-        if (this.$store.getters['auth_e_learning2/role'] == 5)
+        if (this.$store.getters['auth_e_learning2/role'] == USER_ROLE.teacher)
           this.$router.push(`/e_learning2/tc`)
-        else if (this.$store.getters['auth_e_learning2/role'] == 10)
+        else if (this.$store.getters['auth_e_learning2/role'] == USER_ROLE.student)
           this.$router.push(`/e_learning2/st`)
-        else if (this.$store.getters['auth_e_learning2/role'] == 1)
+        else if (this.$store.getters['auth_e_learning2/role'] == USER_ROLE.admin)
           this.$router.push(`/e_learning2/ad`)
       }
     },

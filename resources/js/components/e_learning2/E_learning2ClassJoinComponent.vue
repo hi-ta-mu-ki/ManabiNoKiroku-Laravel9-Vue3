@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import USER_ROLE from "../../const"
 export default {
   data: function () {
     return {
@@ -36,9 +37,9 @@ export default {
       axios.post('/api/e_learning2/class_join_self/' + this.user_id, this.joinForm)
         .then((res) => {
           if(res.status == 201){
-            if (this.$store.getters['auth_e_learning2/role'] == 5)
+            if (this.$store.getters['auth_e_learning2/role'] == USER_ROLE.teacher)
               this.$router.push(`/e_learning2/tc`)
-            else if (this.$store.getters['auth_e_learning2/role'] == 10)
+            else if (this.$store.getters['auth_e_learning2/role'] == USER_ROLE.student)
               this.$router.push(`/e_learning2/st`)
           }else{
             this.isMsg = true

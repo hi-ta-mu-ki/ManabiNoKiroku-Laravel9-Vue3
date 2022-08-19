@@ -47,8 +47,8 @@
           <tr v-for="user in users" :key="user.user.id">
             <td>{{ user.user.name }}</td>
             <td>
-              <div v-if="user.user.role == 1">管理者</div>
-              <div v-else-if="user.user.role == 5">教員</div>
+              <div v-if="user.user.role == USER_ROLE.admin">管理者</div>
+              <div v-else-if="user.user.role == USER_ROLE.teacher">教員</div>
               <div v-else>生徒</div>
             </td>
             <td>
@@ -80,6 +80,7 @@
 
 <script>
 import MemberAdd from './E_learning2MemberAddComponent.vue'
+import USER_ROLE from "../../const"
 export default {
   components: {
     MemberAdd
@@ -91,7 +92,8 @@ export default {
       users: [],
       e_classes_id: 0,
       st_id: 0,
-      user_id: 0
+      user_id: 0,
+      USER_ROLE
     }
   },
   methods: {

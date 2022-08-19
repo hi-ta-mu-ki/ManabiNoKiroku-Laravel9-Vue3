@@ -14,6 +14,7 @@
 <script>
 import { NOT_FOUND, UNAUTHORIZED, INTERNAL_SERVER_ERROR } from '../../util'
 import Header from './E_learning2AdHeaderComponent.vue'
+import USER_ROLE from "../../const"
 export default {
   components: {
     Header,
@@ -25,7 +26,7 @@ export default {
           this.$router.push('/e_learning2/500')
         } else if ((val === UNAUTHORIZED) ||
             !this.$store.getters['auth_e_learning2/check'] ||
-            this.$store.getters['auth_e_learning2/role'] != 1) {
+            this.$store.getters['auth_e_learning2/role'] != USER_ROLE.admin) {
           // トークンをリフレッシュ
           await axios.get('/api/e_learning2/refresh-token')
           // ストアのuserをクリア

@@ -29,9 +29,9 @@ class E_learning2_StudentController extends Controller
     return $this->student_service->answer_create($request);
   }
 
-  public function answer_list2($user_id, $e_classes_id)
+  public function answer_my_list($user_id, $e_classes_id)
   {
-    return $this->student_service->answer_list2($user_id, $e_classes_id);
+    return $this->student_service->answer_my_list($user_id, $e_classes_id);
   }
 
   public function answer_delete($user_id, $e_classes_id)

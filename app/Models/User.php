@@ -51,4 +51,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Photo');
     }
 
+    /**
+     * ユーザーロール(role)
+     */
+    const ADMIN = 1;    //管理者
+    const TEACHER = 5;  //教員
+    const STUDENT = 10; //生徒
 }

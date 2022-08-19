@@ -142,7 +142,7 @@ export default {
       this.getQuestionsMenu()
     },
     getQuestionsMenu() {
-      axios.get('/api/e_learning2/section_menu1/' + this.$store.getters['auth_e_learning2/e_groups_id'])
+      axios.get('/api/e_learning2/question_menu/' + this.$store.getters['auth_e_learning2/e_groups_id'])
         .then((res) => {
           this.questions_menu = res.data
         });

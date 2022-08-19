@@ -3,56 +3,65 @@
 namespace App\Services;
 
 use App\Repositories\Exercise_RepositoryInterface;
+use App\Services\Answer_Query_ServiceInterface;
+use App\Services\Class_Query_ServiceInterface;
+use App\Services\Exercise_Query_ServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Facades\Csv;
 use SplFileObject;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Exercise;
-use App\Models\E_class;
-use App\Models\E_answer;
 
 class Exercise_Service implements Exercise_ServiceInterface
 {
   private $exercise_repository;
+  private $answer_query_service;
+  private $class_query_service;
+  private $exercise_query_service;
 
   public function __construct(
-    Exercise_RepositoryInterface $exercise_repository
+    Exercise_RepositoryInterface $exercise_repository,
+    Exercise_Query_ServiceInterface $exercise_query_service,
+    Class_Query_ServiceInterface $class_query_service,
+    Answer_Query_ServiceInterface $answer_query_service
   ) {
     $this->exercise_repository = $exercise_repository;
+    $this->answer_query_service = $answer_query_service;
+    $this->class_query_service = $class_query_service;
+    $this->exercise_query_service = $exercise_query_service;
   }
 
-  public function menu($e_groups_id)
+  public function question_menu($e_groups_id)
   {
-    return Exercise::where('q_no', 0)->where('e_groups_id', $e_groups_id)->get();
+    return $this->exercise_query_service->get_question_menu($e_groups_id);
   }
 
-  public function list($e_groups_id, $no)
+  public function question_list($e_groups_id, $no)
   {
-    return Exercise::where('e_groups_id', $e_groups_id)->where('no', $no)->get();
+    return $this->exercise_query_service->get_question_list($e_groups_id, $no);
   }
 
-  public function show($id)
+  public function question_show($id)
   {
     return $this->exercise_repository->show($id);
   }
 
-  public function create($request)
+  public function question_create($request)
   {
     return $this->exercise_repository->create($request->all());
   }
 
-  public function update($id, $request)
+  public function question_update($id, $request)
   {
     return $this->exercise_repository->update($id, $request->all());
   }
 
-  public function delete($id)
+  public function question_delete($id)
   {
     return $this->exercise_repository->delete($id);
   }
 
-  public function import($request)
+  public function question_import($request)
   {
     Log::Debug(__CLASS__.':'.__FUNCTION__, $request->all());
     // 拡張子チェックがうまく動かないことがあるので独自で実施
@@ -98,7 +107,7 @@ class Exercise_Service implements Exercise_ServiceInterface
     //    return ['import' => $ret];
   }
 
-  public function import2($request)
+  public function question_import2($request)
   {
     // CSVimport::truncate();
     setlocale(LC_ALL, 'ja_JP.UTF-8');
@@ -183,8 +192,8 @@ class Exercise_Service implements Exercise_ServiceInterface
 
   public function answer_list($e_groups_id, $no)
   {
-    $e_classes_id = E_class::where('e_groups_id', $e_groups_id)->select('id')->getQuery();
-    $answers = E_answer::whereIn('e_classes_id', $e_classes_id)->where('no', $no)->orderBy('s_id', 'asc')->orderBy('user_id', 'asc')->orderBy('q_no', 'asc')->with('user')->get();
+    $e_classes_id = $this->class_query_service->get_group_to_class($e_groups_id);
+    $answers = $this->answer_query_service->get_class_to_answer($e_classes_id, $no);
     $answer_lists = array(array());
     $i = -1;
     $tmp_s_id = 0;
@@ -208,8 +217,8 @@ class Exercise_Service implements Exercise_ServiceInterface
 
   public function answer_graph($e_groups_id, $no, $q_no)
   {
-    $e_classes_id = E_class::where('e_groups_id', $e_groups_id)->select('id')->getQuery();
-    $answers = E_answer::whereIn('e_classes_id', $e_classes_id)->where('no', $no)->where('q_no', $q_no)->get();
+    $e_classes_id = $this->class_query_service->get_group_to_class($e_groups_id);
+    $answers = $this->answer_query_service->get_class_to_answer_graph($e_classes_id, $no, $q_no);
     $answer_count = array(array());
     for($i = 0; $i < 4; $i++){
       $answer_count[$i] = 0;
